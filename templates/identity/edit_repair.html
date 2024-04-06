@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% extends "Dashboard/templates/layouts/base.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+    <style>
+        .explain{
+            background-color: rgba(0,0,0,0.3);
+            color: white;
+            width: 50vw;
+            height: 120px;
+            resize: none;
+        }
+        .repairman{
+            width: 20vw;
+            color: white;
+            background-color: rgba(41,41,41,0.9);
+            text-align-last: center
+        }
+    </style>
+    <form action="{% url 'identity:edit_repair' repair.id %}" method="post">
+        {% csrf_token %}
+        {{ form.device }}
+        {{ form.date }}
+        <div class="modal-content"
+             style="width: 50vw; margin: 0 auto; background-color: rgba(41,41,41,0.9); text-align-last: center">
+            <div style="direction: rtl;display: block;margin-top: 10px">
+                <label style="color: white; display: block">تکنسین فنی را انتخاب کنید: </label>
+                {{ form.repairman }}
+            </div>
+            <div style="direction: rtl;display: block; margin-top: 50px">
+                <label style="color: white; display: block">شرح اقدامات را وارد کنید: </label>
+                {{ form.explain }}
+            </div>
+            <div style="display: flex; margin: 20px auto; direction: rtl">
+                <button name="cancel" style="width: 5rem;">انصراف</button>
+                <button name="submit" style="width: 5rem;">ویرایش</button>
+            </div>
+        </div>
+    </form>
+{% endblock content %}
+</body>
+</html>

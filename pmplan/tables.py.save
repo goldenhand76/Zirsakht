@@ -1,0 +1,18 @@
+import django_tables2 as tables
+
+
+class PMTable(tables.Table):
+    # date = tables.Column(attrs={"td": {"align": "center"}})
+    device = tables.Column(attrs={"td": {"align": "center"}, "th": {"align": "center"}})
+    code = tables.Column(attrs={"td": {"align": "center"},  "th": {"align": "center"}})
+    # season = tables.Column(attrs={"td": {"align": "center"}})
+    # duration = tables.Column(attrs={"td": {"align": "center"}})
+    location = tables.Column(attrs={"td": {"align": "center"}, })
+    duty = tables.Column(attrs={"td": {"align": "right"}, "th": {"align": "right"}})
+    # factor = tables.Column(attrs={"td": {"align": "center"}})
+    status = tables.Column(attrs={"td": {"align": "center"}})
+
+    class Meta:
+        template_name = "django_tables2/bootstrap.html"
+        sequence = ('status', 'location', 'code', 'duty', 'device')
+

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+{% extends 'home/base.html' %}
+{% load static %}
+{% load deadline %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% block content %}
+    <div class="row" style="direction: rtl;">
+        <div class="col-md-12">
+            <div>
+                <ul role="tablist" class="nav nav-tabs">
+                    <li role="presentation" class="nav-item"><a role="tab" data-toggle="tab" class="nav-link active"
+                                                                href="#tab-1">نامه ها</a></li>
+                    <li role="presentation" class="nav-item"><a role="tab" data-toggle="tab" class="nav-link"
+                                                                href="#tab-2">کمیته استقرار</a></li>
+                    <li role="presentation" class="nav-item"><a role="tab" data-toggle="tab" class="nav-link"
+                                                                href="#tab-3">کمیته زیرساخت</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab-1" style="overflow-x: auto; margin: 10px 0">
+
+                        <input type="hidden" id="ascending" value="true">
+                        <input type="hidden" id="sort_letter_url" data-url="{% url 'letter:sort_letter' %}" />
+
+                        <a class="text-right" href="#" id="myBtn">
+                            <input type="hidden" id="add_letter_url" data-url="{% url 'letter:add_letter' %}" />
+                            <img src="{% static '/assets/img/icons8-plus-40.png' %}" style="width: 30px;height: 30px;"/>
+                        </a>
+                    <div id="myModal" class="modal">
+                        <div class="modal-content"
+                             style="width: 50vw; margin: 0 auto; background-color: rgba(41,41,41,0.9)">
+                            <div style="direction: rtl;display: flex;margin: 5px auto">
+                                <label for="subject" style="color: white">موضوع: </label>
+                                <input id="subject" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+
+                                <label for="receiver" style="color: white; padding-right: 30px">گیرنده: </label>
+                                <input id="receiver" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+                            </div>
+
+                            <div style="direction: rtl;display: flex;margin: 5px auto">
+                                <label for="number" style="color: white">شماره: </label>
+                                <input id="number" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+
+                                <label for="date" style="color: white; padding-right: 30px">تاریخ: </label>
+                                <input id="date" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center" type="text" autocomplete="off">
+
+                                <label for="deadline" style="color: white; padding-right: 30px">مهلت:</label>
+                                <input id="deadline" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center" placeholder="روز">
+                            </div>
+
+                            <div style="direction: rtl;display: block; margin-top: 10px">
+                                <label for="text" style="color: white">متن نامه: </label>
+                                <textarea id="text" style="text-align:justify; white-space:normal; width: 50vw; height: 200px; background-color: rgba(0,0,0,0.3); color: white; text-align-last: right" type="text"></textarea>
+                            </div>
+
+                            <div style="display: flex; margin: 20px auto; direction: rtl">
+                                <button id="close" style="width: 5rem;">انصراف</button>
+                                <button name="Submit" onclick="add_letter()" style="width: 5rem;">تایید</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                        <div class="list-group text-right">
+                            <div class="list-group-item" style="text-align: right; width: border-box;">
+                                <a type="button" onclick="sort_letter('subject')">موضوع</a>
+                                <a type="button" onclick="sort_letter('receiver')" style="position: absolute; right: 20vw">گیرنده</a>
+                                <a type="button" onclick="sort_letter('number')" style="position: absolute; right: 40vw">شماره</a>
+                                <a type="button" onclick="sort_letter('date')" style="position: absolute; right: 60vw">مورخ</a>
+                                <a type="button" onclick="sort_letter('deadline')" style="position: absolute; right: 80vw">مهلت اقدام</a>
+                            </div>
+
+                            {% for letter in letters %}
+                                <button class="list-group-item list-group-item-action" id="button_{{ letter.id }}"
+                                        onclick="fAbreGuias('{{ letter.id }}', 'button_{{ letter.id }}')"
+                                        style="height: auto;">
+                                    <span style="position: relative; width: 10vw;">{{ letter.subject }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 20vw;">{{ letter.receiver }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 40vw;">{{ letter.number }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 60vw;">{% jalali_date letter.date %}</span>
+                                    <span style="position: absolute; width: 10vw;right: 80vw; color: {% color letter %}">{% deadline letter %}<span>  روز مانده</span></span>
+
+                                </button>
+                                <div id='{{ letter.id }}'
+                                     style="display :none; height: auto; border: 1px solid rgba(0, 0, 0, .125); border-top-style: hidden">
+                                    <div style="margin-top: 20px;display: flex">
+                                        <p style="margin-right: 18px">متن نامه:</p>
+                                        <div style="border: 1px solid rgba(0, 0, 0, .125);border-radius: 2vh;background-color: rgba(255, 255, 255, 0.5); width: 50vw; height: auto; margin-right: 20px">
+                                            <p class="text-gray-700" style="margin: 10px">{{ letter.text|linebreaksbr }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-2" style="overflow-x: auto; margin: 10px 0">
+                        <div class="list-group text-right">
+                            <button class="list-group-item" style="flex-wrap: wrap; width: auto; text-align: right">
+                                <a>موضوع</a>
+                                <a type="button" onclick="alert('hello')" style="position: absolute; right: 360px">شماره</a>
+                                <a type="button" style="position: absolute; right: 480px">مورخ</a>
+                                <a type="button" style="position: absolute; right: 650px">گیرنده</a>
+                                <a type="button" style="position: absolute; left: 50px">مهلت اقدام</a>
+                            </button>
+
+                            {% for structe in structures %}
+                                <button class="list-group-item list-group-item-action" id="button_{{ structe.id }}"
+                                        onclick="fAbreGuias('{{ structe.id }}', 'button_{{ structe.id }}')"
+                                        style="flex-wrap: wrap; width: auto">
+                                    <span style="position: relative">{{ structe.subject }}</span>
+                                    <span style="position: absolute; right: 360px">{{ structe.number }}</span>
+                                    <span style="position: absolute; right: 480px">{% jalali_date structe.date %}</span>
+                                    <span style="position: absolute; right: 650px">{{ structe.responsible }}</span>
+                                    <span style="position: absolute; left: 50px; color: {% color structe %}">{% deadline structe %}<span> روز مانده</span></span>
+                                </button>
+                                <div id='{{ structe.id }}'
+                                     style="display :none; height: 100px; border: 1px solid rgba(0, 0, 0, .125); border-top-style: hidden">
+                                    <div style="margin-top: 20px">
+                                        <p style="margin-right: 18px">متن نامه</p>
+                                        <p class="text-gray-700" style="margin-right: 20px">{{ structe.text }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-3" style="overflow-x: auto; margin: 10px 0">
+                        <div class="list-group text-right">
+                            <button class="list-group-item" style="flex-wrap: wrap; width: auto; text-align: right">
+                                <span>موضوع</span>
+                                <span style="position: absolute; right: 360px">شماره</span>
+                                <span style="position: absolute; right: 480px">مورخ</span>
+                                <span style="position: absolute; right: 650px">گیرنده</span>
+                                <span style="position: absolute; left: 50px">مهلت اقدام</span>
+                            </button>
+
+                            {% for establish in establishes %}
+                                <button class="list-group-item list-group-item-action" id="button_{{ establish.id }}"
+                                        onclick="fAbreGuias('{{ establish.id }}', 'button_{{ establish.id }}')"
+                                        style="flex-wrap: wrap; width: auto">
+                                    <span style="position: relative">{{ establish.subject }}</span>
+                                    <span style="position: absolute; right: 360px">{{ establish.number }}</span>
+                                    <span style="position: absolute; right: 480px">{% jalali_date establish.date %}</span>
+                                    <span style="position: absolute; right: 650px">{{ establish.responsible }}</span>
+                                    <span style="position: absolute; left: 50px; color: {% color establish %}">{% deadline establish %}<span> روز مانده</span></span>
+                                </button>
+                                <div id='{{ establish.id }}'
+                                     style="display :none; height: 100px; border: 1px solid rgba(0, 0, 0, .125); border-top-style: hidden">
+                                    <div style="margin-top: 20px">
+                                        <p style="margin-right: 18px">متن نامه</p>
+                                        <p class="text-gray-700" style="margin-right: 20px">{{ establish.text }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'assets/js/sort.js' %}"></script>
+    <script src="{% static 'assets/js/jalali_calander/src/kamadatepicker.js' %}"></script>
+    <script>kamaDatepicker('date', { markToday: true, position: 'bottom', pastYearsCount: 1});</script>
+    <script>
+        function fAbreGuias(id, button) {
+            var vGuias = document.getElementById(id);
+            var button_border = document.getElementById(button);
+            if (vGuias.style.display === "block") { // if vGuias hidden, display it
+                vGuias.style.display = "none";
+                button_border.style.borderBottomColor = 'rgba(0, 0, 0, .125)';
+                vGuias.style.backgroundColor = "transparent";
+                button_border.style.backgroundColor = 'transparent';
+            } else { // if vGuias displayed, hidden it
+                vGuias.style.display = "block";
+                button_border.style.borderBottomColor = 'transparent';
+                vGuias.style.backgroundColor = 'rgba(0, 0, 0, .125)';
+                button_border.style.backgroundColor = 'rgba(0, 0, 0, .2)';
+            }
+        }
+{% endblock content %}
+</body>
+</html>

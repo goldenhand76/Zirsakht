@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends 'home/base.html' %}
+{% load render_table from django_tables2 %}
+{% load verbose_name %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+{% block content %}
+
+    <div class="table" id="target" style="text-align: center">
+        {% render_table table %}
+    </div>
+
+{#    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>#}
+{#  <script type="text/javascript">#}
+{##}
+{#          let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');#}
+{#          mywindow.document.write(`<html><head><title></title>{% load render_table from django_tables2 %} {% load static %}`);#}
+{#          mywindow.document.write( "<link rel=\"stylesheet\" href=\"{% static 'assets/fonts/font_style.css' %}\" type=\"text/css\"/>" );#}
+{#          mywindow.document.write( "<link rel=\"stylesheet\" href=\"{% static 'assets/bootstrap/css/bootstrap.min.css' %}\" type=\"text/css\"/>" );#}
+{#          mywindow.document.write( "<link rel=\"stylesheet\" href=\"{% static 'assets/css/NewStyle.css' %}\" type=\"text/css\"/>" );#}
+{#          mywindow.document.write('</head><body >');#}
+{#          mywindow.document.write(`<div style="text-align: center;">{% render_table table %}</div>`);#}
+{#          mywindow.document.write('</body></html>');#}
+{##}
+{#          mywindow.print();#}
+{#          mywindow.close();#}
+{##}
+{#    </script>#}
+{% endblock content %}
+
+</body>
+</html>

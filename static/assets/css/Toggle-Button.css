@@ -1,0 +1,207 @@
+/* >>>>>>>>>>> AIR CONDITIONER STATUS <<<<<<<<<<<<<< */
+/* >>>>>>>>>>> AIR CONDITIONER STATUS <<<<<<<<<<<<<< */
+/* >>>>>>>>>>> AIR CONDITIONER STATUS <<<<<<<<<<<<<< */
+
+.ac-status-switch {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+}
+
+.ac-status-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ac-status-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/static/assets/img/computer-icons-button-clip-art-turn-off-ico-download-1d4157047a628b7e05ddd472c57399dd.png') center / cover no-repeat;
+    transition: 0.1s;
+}
+
+#ac-status:checked + .ac-status-slider {
+    background-color: #4ef336;
+    -webkit-animation: glow-green 1s ease-in-out infinite alternate;
+    -moz-animation: glow-green 1s ease-in-out infinite alternate;
+    animation: glow-green 1s ease-in-out infinite alternate;
+}
+
+
+.ac-status-slider.ac-status-round {
+    border-radius: 34px;
+}
+
+
+.ac-status-slider.ac-status-round:before {
+    border-radius: 50%;
+}
+
+/* >>>>>>>>>>> AIR CONDITIONER AUTO <<<<<<<<<<<<<< */
+/* >>>>>>>>>>> AIR CONDITIONER AUTO <<<<<<<<<<<<<< */
+/* >>>>>>>>>>> AIR CONDITIONER AUTO <<<<<<<<<<<<<< */
+
+.ac-auto-switch {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+}
+
+.ac-auto-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ac-auto-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/static/assets/img/auto.png') center / cover no-repeat;
+    transition: .4s;
+}
+
+#ac-auto:checked + .ac-auto-slider {
+    background-color: #2196F3;
+    -webkit-animation: glow-blue 1s ease-in-out infinite alternate;
+    -moz-animation: glow-blue 1s ease-in-out infinite alternate;
+    animation: glow-blue 1s ease-in-out infinite alternate;
+}
+
+.ac-auto-slider.ac-auto-round {
+    border-radius: 34px;
+}
+
+
+.ac-auto-slider.ac-auto-round:before {
+    border-radius: 50%;
+}
+
+/* >>>>>>>>>>> FAN COIL STATUS <<<<<<<<<<<<<< */
+/* >>>>>>>>>>> FAN COIL STATUS <<<<<<<<<<<<<< */
+/* >>>>>>>>>>> FAN COIL STATUS <<<<<<<<<<<<<< */
+
+.room-status-switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+}
+
+.room-status-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.room-status-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/static/assets/img/computer-icons-button-clip-art-turn-off-ico-download-1d4157047a628b7e05ddd472c57399dd.png') center / cover no-repeat;
+    transition: 0.1s;
+}
+
+#room-status:checked + .room-status-slider {
+    background-color: #4ef336;
+    -webkit-animation: glow-green 1s ease-in-out infinite alternate;
+    -moz-animation: glow-green 1s ease-in-out infinite alternate;
+    animation: glow-green 1s ease-in-out infinite alternate;
+}
+
+
+.room-status-slider.room-status-round {
+    border-radius: 34px;
+}
+
+
+.room-status-slider.room-status-round:before {
+    border-radius: 50%;
+}
+
+/* >>>>>>>>>>> FAN COIL AUTO <<<<<<<<<<<<<< */
+/* >>>>>>>>>>> FAN COIL AUTO <<<<<<<<<<<<<< */
+/* >>>>>>>>>>> FAN COIL AUTO <<<<<<<<<<<<<< */
+
+.room-auto-switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+}
+
+.room-auto-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.room-auto-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/static/assets/img/auto.png') center / cover no-repeat;
+    transition: .4s;
+}
+
+#room-auto:checked + .room-auto-slider {
+    background-color: #2196F3;
+    -webkit-animation: glow-blue 1s ease-in-out infinite alternate;
+    -moz-animation: glow-blue 1s ease-in-out infinite alternate;
+    animation: glow-blue 1s ease-in-out infinite alternate;
+}
+
+.room-auto-slider.room-auto-round {
+    border-radius: 34px;
+}
+
+
+.room-auto-slider.room-auto-round:before {
+    border-radius: 50%;
+}
+
+@-webkit-keyframes glow-green {
+    from {
+        box-shadow: 0 0 1px #fff, 0 0 2px #ffffff, 0 0 3px #aee695, 0 0 4px #49e638;
+    }
+
+    to {
+        box-shadow: 0 0 3px #fff, 0 0 6px #ccff1f, 0 0 9px #9dff4f, 0 0 12px #1bff08;
+    }
+}
+
+@-webkit-keyframes glow-blue {
+    from {
+        box-shadow: 0 0 1px #fff, 0 0 2px #ffffff, 0 0 3px #4fa9e6, 0 0 4px #2662e6;
+    }
+
+    to {
+        box-shadow: 0 0 5px #fff, 0 0 10px #36beff, 0 0 15px #308bff, 0 0 20px #3835ff;
+    }
+}
+
+.settings{
+    position: relative;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    background: url('/static/assets/img/settings.png') center / cover no-repeat;
+    border: none;
+}
+

@@ -1,0 +1,543 @@
+{% extends "Dashboard/templates/layouts/base.html" %}
+
+{% load static %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/Toggle-Button.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/range-slider-master/css/rSlider.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/user-friendly-time-picker/dist/css/timepicker.min.css' %}" />
+    <style>
+    .selected {
+
+    }
+    </style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+	<div class="content">
+        <div id="myModal" class="modal">
+            <div class="modal-content"
+                 style="width: 900px; height: 300px; margin: 0 auto;background-color: rgba(41,41,41,0.9)">
+                <div style="direction: rtl;display: block; width: 800px;">
+                    <div style="margin: 0 auto; transform: translateX(50px)">
+                        <div style="margin-top: 20px; display: flex">
+                            <h3 style="color: whitesmoke">شروع</h3>
+                            <input id="start-time" type="text" class="bs-timepicker" style="background-color: black; color: whitesmoke; text-align-last: center"/>
+                            <h3 style="color: whitesmoke">پایان</h3>
+                            <input id="stop-time" type="text" class="bs-timepicker" style="background-color: black; color: whitesmoke; text-align-last: center"/>
+                        </div>
+                        <div style="margin-top: 50px">
+                            <input type="text" id="slider">
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex ; margin: 50px auto">
+                    <button id="submit" style="width: 100px; margin-right: 50px">اعمال</button>
+                    <button id="cancel" style="width: 100px;">انصراف</button>
+                </div>
+            </div>
+        </div>
+
+		<div class="panel-header bg-primary-gradient">
+			<div class="page-inner py-5">
+			</div>
+		</div>
+		<div class="page-inner mt--5">
+			<div class="row mt--2" style="direction: rtl">
+				<div class="col-md-6">
+					<div class="card full-height">
+						<div class="card-header" style="direction: rtl">
+                            <div class="card-head-row">
+                                <div class="card-title text-right">انتخاب هواساز</div>
+                            </div>
+						</div>
+                        <div class="card-body">
+                            <div class="table-responsive table-hover table-sales">
+                                <table id="mytable" class="table table-active" style="direction: rtl">
+                                    <thead>
+                                        <tr style="color: whitesmoke">
+                                            <th class="text-right">شماره </th>
+                                            <th class="text-right">وضعیت</th>
+                                            <th class="text-right">دمای کویل</th>
+                                            <th class="text-right">آخرین بروزرسانی</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody2">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card full-height">
+                        <div class="card-header" style="direction: rtl">
+                            <div class="card-title text-right">مانیتورینگ</div>
+                            <div class="card-category text-right">مشاهده وضعیت لحظه ای سنسور ها
+                            </div>
+                        </div>
+                        <div class="card-body" >
+                            <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+                                <div class="px-2 pb-2 pb-md-0 text-center">
+                                    <div style="display: flex; justify-content: center;">
+                                        <img src= "{% static '/assets/img/SeekPng.com_gauge-png_2184670.png' %}" width="120px" style="z-index: 2">
+                                        <canvas id="speed-gauge" style="width: 210px; position: absolute;"></canvas>
+                                        <div id="speed-gauge-textfield" style="color: white; position:absolute; font-size: 15px; transform: translateY(70px); "></div>
+                                        <p style="color: white; position:absolute; font-size: 12px; transform: translateY(90px)"> RPS</p>
+                                    </div>
+                                    <h6 class="fw-bold mt-2 mb-0">Speed</h6>
+                                </div>
+                                <div class="px-2 pb-2 pb-md-0 text-center">
+                                    <div style="display: flex; justify-content: center;">
+                                        <img src= "{% static '/assets/img/SeekPng.com_gauge-png_2184670.png' %}" width="120px" style="z-index: 2">
+                                        <canvas id="temp-gauge" style="width: 210px; position: absolute;"></canvas>
+                                        <div id="temp-gauge-textfield"
+                                             style="color: white; position:absolute; font-size: 15px; transform: translateY(70px)"></div>
+                                        <p style="color: white; position:absolute; font-size: 12px; transform: translateY(90px)">&#8451;</p>
+                                    </div>
+                                    <h6 class="fw-bold mt-2 mb-0">Temperature</h6>
+                                </div>
+                                <div class="px-2 pb-2 pb-md-0 text-center">
+                                    <div style="display: flex; justify-content: center;">
+                                        <img src= "{% static '/assets/img/SeekPng.com_gauge-png_2184670.png' %}" width="120px" style="z-index: 2">
+                                        <canvas id="angle-gauge" style="width: 210px; position: absolute"></canvas>
+                                        <div id="angle-gauge-textfield"
+                                             style="color: white; position:absolute; font-size: 15px; transform: translateY(70px)"></div>
+                                        <p style="color: white; position:absolute; font-size: 12px; transform: translateY(90px)">DEG</p>
+                                    </div>
+                                    <h6 class="fw-bold mt-2 mb-0">Angle</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-wrap justify-content-sm-center">
+                                <label class="ac-auto-switch">
+                                    <input id="ac-auto" type="checkbox">
+                                    <span class="ac-auto-slider ac-auto-round"></span>
+                                </label>
+
+                                <label class="ac-status-switch" style="margin-right: 10vw">
+                                    <input id="ac-status" type="checkbox">
+                                    <span class="ac-status-slider ac-status-round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="row">
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-header" style="direction: rtl">
+							<div class="card-head-row">
+								<div class="card-title text-right">نمودارها</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart-container" style="min-height: 200px">
+								<canvas id="temp-chart"></canvas>
+							</div>
+							<div id="myChartLegend"></div>
+
+                            <div class="chart-container" style="min-height: 200px">
+                                <canvas id="speed-chart"></canvas>
+                            </div>
+                            <div id="myChartLegend2"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+                    <div class="card card-chart">
+                        <div class="card-header" style="direction: rtl">
+                            <h5 class="card-category text-right">پیش بینی آب و هوا</h5>
+                            <h3 class="card-title text-right"><i class="tim-icons icon-send text-success"></i>۵ روز</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="dailyforecast"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-chart">
+                        <div class="card-header" style="direction: rtl">
+                            <h5 class="card-category text-right">پیش بینی آب و هوا</h5>
+                            <h3 class="card-title text-right"><i class="tim-icons icon-send text-success"></i>۱۲ ساعت </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="hourlyforecast"></canvas>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+			</div>
+			<div class="row row-card-no-pd">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header" style="direction: rtl">
+							<div class="card-head-row card-tools-still-right">
+								<h4 class="card-title text-right">نقشه دما</h4>
+							</div>
+							<p class="card-category text-right">
+							مشاهده دمای لحظه ای اتاق ها</p>
+						</div>
+						<div class="card-body">
+							<div class="row" style="direction: rtl">
+									<div class="table-responsive table-hover text-center">
+										<table class="table table-active" style="direction: rtl">
+                                            <thead>
+                                            <tr style="color: whitesmoke">
+                                                <th class="text-right">شماره</th>
+                                                <th class="text-right">توضیحات</th>
+                                                <th class="text-right">دما</th>
+                                                <th class="text-right">آخرین بروزرسانی</th>
+                                                <th class="text-right">خودکار</th>
+                                                <th class="text-right">وضعیت</th>
+                                                <th class="text-right">تنظیمات</th>
+                                            </tr>
+                                            </thead>
+											<tbody id="tbody">
+											</tbody>
+										</table>
+									</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" style="margin: auto auto;">
+                                    <div class="chart-container" style="min-height: 200px">
+                                        <canvas id="room-temp-chart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin: auto auto; width: 100%">
+                                    <div class="mapcontainer scroll-x">
+                                        <img id="B2" src="{% static 'B_2_removebg_white.png' %}" usemap="#image-map">
+                                        <map name="image-map">
+                                            <area room="611" target="" alt="611" title="611" href="" coords="279,332,279,430,201,430,202,353,256,353,256,332" shape="poly">
+                                            <area room="610" target="" alt="610" title="610" href="" coords="283,299,346,430" shape="rect">
+                                            <area room="617" target="" alt="617" title="617" href="" coords="563,87,562,10,281,11,282,67,314,67,315,131,347,131,347,87" shape="poly">
+                                            <area room="616" target="" alt="616" title="616" href="" coords="279,9,201,9,202,87,253,87,253,69,279,68" shape="poly">
+                                            <area room="615" target="" alt="615" title="615" href="" coords="199,263,198,349,55,349,55,299,122,298,122,263" shape="poly">
+                                            <area room="614" target="" alt="614" title="614" href="" coords="52,349,8,299" shape="rect">
+                                            <area room="603" target="" alt="603" title="603" href="" coords="199,91,122,178" shape="rect">
+                                            <area room="618" target="" alt="618" title="618" href="" coords="55,88,120,6" shape="rect">
+                                            <area room="619" target="" alt="619" title="619" href="" coords="117,144,55,195" shape="rect">
+                                        </map>
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+    <script type="text/javascript" src="{% static 'assets/js/gauge.min.js' %}"></script>
+    <script src="{% static "dashboard/static/assets/js/setting-demo.js" %}"></script>
+    <script src="{% static "dashboard/static/assets/js/demo.js" %}"></script>
+    <script src='{% static "assets/js/range-slider-master/js/rSlider.min.js" %}'></script>
+    <script src="{% static 'assets/user-friendly-time-picker/dist/js/timepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/ImageMapster-1.5.4/dist/jquery.imagemapster.js' %}"></script>
+
+	<script>
+		$('#lineChart').sparkline([105,103,123,100,95,105,115], {
+			type: 'line',
+			height: '70',
+			width: '100%',
+			lineWidth: '2',
+			lineColor: '#ffa534',
+			fillColor: 'rgba(255, 165, 52, .14)'
+		});
+	</script>
+
+    // Room Modal
+
+    <script>
+        $.ajax({
+            url: "{% url 'dashboard:motor' %}",
+            type: "GET",
+            success: function (response) {
+                $("#tbody2").empty();
+                var motors = response.motors
+                var statuses = response.statuses
+                var temps = response.temps
+                var times = response.times
+                for (i = 0; i < motors.length; i++) {
+                    $("#tbody2").append(
+                        "<tr motor=" + motors[i] +
+                        "><td class=\"text-right\">" + motors[i] +
+                        "</td><td class=\"text-right\">" + statuses[i] +
+                        "</td><td class=\"text-right\">" + temps[i] +
+                        "</td><td class=\"text-right\">" + times[i] +
+                        "</td></tr>");
+                }
+                $("#tbody2 tr").click(function(){
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                    var value=$(this).find('td:first').html();
+                    chart('AC' + value);
+                });
+            },
+        });
+
+    </script>
+
+    // MAP
+    <script>
+        var modal = document.getElementById("myModal");
+        var cancel = document.getElementById("cancel");
+        var submit = document.getElementById("submit");
+
+        var basic_opts = {
+            mapKey: 'room',
+        };
+        var initial_opts = $.extend({}, basic_opts,
+            {
+                staticState: false,
+                fill: false,
+                stroke: true,
+                strokeWidth: 1,
+                strokeColor: 'black',
+                onClick: function (evt) {
+                    var room = evt.key;
+                    select_room(room)
+                },
+                onMouseover: function (evt) {
+                    var room = evt.key;
+                    highlightArea(room);
+                },
+                onMouseout: function (evt) {
+                    var room = evt.key;
+                    highlightAreaX(room);
+                }
+            });
+        var map = $('#B2').mapster(initial_opts)
+
+        $(document).ready(function () {
+            $.ajax({
+                url: "{% url 'dashboard:room' %}",
+                type: "POST",
+                data: {},
+                success: function (response) {
+                    $("#tbody").empty();
+                    var rooms = response.rooms
+                    var descriptions = response.descriptions
+                    var temps = response.temps
+                    var colors = response.colors
+                    var times = response.times
+                    for (i = 0; i < rooms.length; i++) {
+                        map.mapster('set', true, rooms[i], {
+                            fill: true,
+                            fillColor: colors[i],
+                            fillOpacity: 0.5,
+                        })
+                        $("#tbody").append(
+                            "<tr room=" + rooms[i] +
+                            " onmouseover=\"highlightArea(" + rooms[i] +
+                            ");\" onmouseout=\"highlightAreaX(" + rooms[i] +
+                            ");\"><td class=\"text-right\">" + rooms[i] +
+                            "</td><td class=\"text-right\">" + descriptions[i] +
+                            "</td><td class=\"text-right\">" + temps[i] +
+                            "</td><td class=\"text-right\">" + times[i] +
+                            "</td><td class=\"text-right\" >" +
+                            "<label class=\"room-auto-switch\">" +
+                            "<input id=\"room-auto\" type=\"checkbox\">" +
+                            "<span class=\"room-auto-slider room-auto-round\"></span></label>" +
+                            "</td><td class=\"text-right\" >" +
+                            "<label class=\"room-status-switch\">" +
+                            "<input id=\"room-status\" type=\"checkbox\">" +
+                            "<span class=\"room-status-slider room-status-round\"></span></label>" +
+                            "</td><td class=\"text-right\" >" +
+                            "<input class=\"settings\" name=\"button\" type=\"button\" onclick=\"select_room(" + rooms[i] + ")\">" +
+                            "</td></tr>");
+                    }
+                },
+            });
+        })
+        function highlightArea(key) {
+            $('area[room=' + key + ']').mouseenter();
+            map.mapster('set', true, key, {
+                fillOpacity: 0.8,
+            })
+        }
+
+        function highlightAreaX(key) {
+            $('area[room=' + key + ']').mouseout();
+            map.mapster('set', true, key, {
+                fillOpacity: 0.5,
+            })
+        }
+
+        function select_room(room) {
+            modal.style.display = "block"
+            $(function () {
+                $('.bs-timepicker').timepicker();
+            });
+            $.ajax({
+                url: "{% url 'esp8266:room_get' %}",
+                type: "POST",
+                data: {
+                    room: room,
+                },
+            success: function (response) {
+                    var information = JSON.parse(response["room"]);
+                    var fields = information[0]["fields"];
+                    mySlider.setValues(parseInt(fields["min_temp"]), parseInt(fields["max_temp"]))
+                    $('#start-time').val(fields["start"].substring(0, 5))
+                    $('#stop-time').val(fields["stop"].substring(0, 5))
+                },
+            error: function(status, exception) {
+                 window.alert(exception);
+                },
+            });
+
+            var mySlider = new rSlider({
+                target: '#slider',
+                values: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
+                range: true, // range slider
+                set: null,
+                width: 800,
+                scale: true,
+                labels: true,
+                tooltip: true,
+                onChange: function (evt) {
+                }
+            });
+            cancel.onclick = function () {
+                modal.style.display = "none"
+                mySlider.destroy()
+        },
+            submit.onclick = function (){
+                $.ajax({
+                    url: "{% url 'esp8266:room_post' %}",
+                    type: "POST",
+                    data: {
+                        room: room,
+                        range: mySlider.getValue(),
+                        start: $('#start-time').val(),
+                        stop: $('#stop-time').val(),
+                    },
+                    success: function (response) {
+                        window.alert(response);
+                    },
+                    error: function(status, exception) {
+                        window.alert(exception);
+                    },
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'esp8266:room_subscribe' %}",
+                    data: {},
+                });
+                modal.style.display = "none"
+                mySlider.destroy()
+                }
+        }
+
+        $(document).ready(function () {
+            setInterval(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'esp8266:room_subscribe' %}",
+                    data: {},
+                    success: function (response) {
+                        var status = response.status;
+				        var auto = response.auto;
+                        var temp = document.getElementById("room-temp");
+                        var last = document.getElementById("room-last");
+                    },
+                });
+            }, 5000);
+        })
+
+    </script>
+
+    // MOTOR
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'esp8266:motor' %}",
+                data: {},
+                success: function (response) {
+                    var status = response.status;
+                    var auto = response.auto;
+                    document.getElementById("ac-status").checked = status === true;
+                    document.getElementById("ac-auto").checked = auto === true;
+                }
+            });
+            return false;
+        });
+
+        $('#toggle-motor').click(function (event) {
+            event.preventDefault();
+            status = document.getElementById("toggle-motor").checked;
+            auto = document.getElementById("toggle-auto").checked;
+            $.ajax({
+                type: "POST",
+                url: "{% url 'esp8266:change' %}",
+                data: {"status": status, "auto": auto},
+                success: function (response) {
+                    var status = response.status;
+                    var auto = response.auto;
+                    document.getElementById("ac-status").checked = status === true;
+                    document.getElementById("ac-auto").checked = auto === true;
+                }
+            });
+        });
+        $('#toggle-auto').click(function (event) {
+            event.preventDefault();
+            status = document.getElementById("toggle-motor").checked;
+            auto = document.getElementById("toggle-auto").checked;
+            $.ajax({
+                type: "POST",
+                url: "{% url 'esp8266:change' %}",
+                data: {"status": status, "auto": auto},
+                success: function (response) {
+                    var status = response.status;
+                    var auto = response.auto;
+                    document.getElementById("ac-status").checked = status === true;
+                    document.getElementById("ac-auto").checked = auto === true;
+                }
+            });
+        })
+    </script>
+
+    <script>
+        window.onload = function () {
+            var ImageMap = function (map) {
+                    var n,
+                        areas = map.getElementsByTagName('area'),
+                        len = areas.length,
+                        coords = [],
+                        previousWidth = 1920;
+                    for (n = 0; n < len; n++) {
+                        coords[n] = areas[n].coords.split(',');
+                    }
+                    this.resize = function () {
+                        var n, m, clen,
+                            x = document.body.clientWidth / previousWidth;
+                        for (n = 0; n < len; n++) {
+                            clen = coords[n].length;
+                            for (m = 0; m < clen; m++) {
+                                coords[n][m] *= x;
+                            }
+                            areas[n].coords = coords[n].join(',');
+                        }
+                        previousWidth = document.body.clientWidth;
+                        return true;
+                    };
+                    window.onresize = this.resize;
+                },
+                imageMap = new ImageMap(document.getElementById('B2'));
+            imageMap.resize();
+        }
+
+    </script>
+{% endblock javascripts %}

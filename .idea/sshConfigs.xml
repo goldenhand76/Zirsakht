@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="217.219.81.130" id="b3086d68-cb59-4171-9571-f25c51fd6532" port="22" customName="Park" nameFormat="CUSTOM" username="admin-kstp">
+        <option name="customName" value="Park" />
+      </sshConfig>
+      <sshConfig authType="PASSWORD" host="iotcom.ir" id="7769d0ea-02a3-436e-83f5-da2faccb259c" port="2858" customName="RaspberryPi" nameFormat="CUSTOM" username="root">
+        <option name="customName" value="RaspberryPi" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

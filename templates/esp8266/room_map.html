@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+{% extends "home/base.html" %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/static/assets/img/computer-icons-button-clip-art-turn-off-ico-download-1d4157047a628b7e05ddd472c57399dd.png') center / cover no-repeat;
+            transition: 0.1s;
+        }
+        #toggle-motor:checked + .slider {
+            background-color: #4ef336;
+            -webkit-animation: glow-green 1s ease-in-out infinite alternate;
+            -moz-animation: glow-green 1s ease-in-out infinite alternate;
+            animation: glow-green 1s ease-in-out infinite alternate;
+        }
+        .slider.round {
+            border-radius: 34px;
+        }
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        @-webkit-keyframes glow-green {
+            from {
+                box-shadow: 0 0 1px #fff, 0 0 2px #ffffff, 0 0 3px #aee695, 0 0 4px #49e638;
+            }
+
+            to {
+                box-shadow: 0 0 3px #fff, 0 0 6px #ccff1f, 0 0 9px #9dff4f, 0 0 12px #1bff08;
+            }
+        }
+        .switch2 {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+        }
+        /* Hide default HTML checkbox */
+        .switch2 input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        /* The slider */
+        .slider2 {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/static/assets/img/auto.png') center / cover no-repeat;
+            transition: .4s;
+        }
+        input:checked + .slider2 {
+            background-color: #2196F3;
+            -webkit-animation: glow-blue 1s ease-in-out infinite alternate;
+            -moz-animation: glow-blue 1s ease-in-out infinite alternate;
+            animation: glow-blue 1s ease-in-out infinite alternate;
+        }
+        .slider2.round2 {
+            border-radius: 34px;
+        }
+        .slider2.round2:before {
+            border-radius: 50%;
+        }
+
+        @-webkit-keyframes glow-blue {
+            from {
+                box-shadow: 0 0 1px #fff, 0 0 2px #ffffff, 0 0 3px #4fa9e6, 0 0 4px #2662e6;
+            }
+            to {
+                box-shadow: 0 0 5px #fff, 0 0 10px #36beff, 0 0 15px #308bff, 0 0 20px #3835ff;
+            }}
+    </style>
+    <div id="myModal" class="modal">
+        <div class="modal-content"
+             style="width: 900px; height: 300px; margin: 0 auto;background-color: rgba(41,41,41,0.9)">
+            <div style="direction: rtl;display: block; width: 800px;">
+                <div style="margin: 0 auto; transform: translateX(50px)">
+                    <div class="container" style="display: flex">
+                        <div style="margin: 0 auto;">
+                            <label class="switch">
+                                <input id="toggle-motor" type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                            <!-- Rounded switch -->
+                            <label class="switch2">
+                                <input id="toggle-auto" type="checkbox">
+                                <span class="slider2 round2"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; display: flex">
+                        <h3 style="color: whitesmoke">شروع</h3>
+                        <input id="start-time" type="text" class="bs-timepicker" style="background-color: black; color: whitesmoke; text-align-last: center"/>
+                        <h3 style="color: whitesmoke">پایان</h3>
+                        <input id="stop-time" type="text" class="bs-timepicker" style="background-color: black; color: whitesmoke; text-align-last: center"/>
+                    </div>
+                    <div style="margin-top: 50px">
+                        <input type="text" id="slider">
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex ; margin: 50px auto">
+                <button id="submit" style="width: 100px; margin-right: 50px">اعمال</button>
+                <button id="cancel" style="width: 100px;">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+    <img id="B2" src="/media/media/esp8266/B_2.png" usemap="#image-map" style="margin: 0 auto;">
+    <map name="image-map">
+        <area room="611" alt="611" title="611" href=""
+              coords="521,618,479,618,478,661,378,661,377,804,521,804" shape="poly">
+        <area room="610" alt="610" title="610" href="" coords="530,559,528,804,649,804,648,560"
+              shape="poly">
+        <area room="615" alt="615" title="615" href=""
+              coords="369,492,228,492,227,559,101,559,101,651,370,653" shape="poly">
+        <area room="614" alt="614" title="614" href="" coords="95,559,15,559,13,652,95,654" shape="poly">
+        <area room="603" alt="603" title="603" href="" coords="371,333,228,334,228,168,371,169" shape="poly">
+        <area room="616" alt="616" title="616" href="" coords="378,163,377,21,521,20,521,125,471,126,471,164"
+              shape="poly">
+        <area room="617" alt="617" title="617" href=""
+              coords="649,248,590,247,589,167,530,166,530,21,1049,19,1051,167,649,164" shape="poly">
+        <area room="618" alt="618" title="618" href="" coords="220,162,103,162,103,11,220,11" shape="poly">
+        <area room="619" alt="619" title="619" href="" coords="222,363,222,273,101,272,100,363" shape="poly">
+    </map>
+</div>
+
+<script>
+    var modal = document.getElementById("myModal");
+    var cancel = document.getElementById("cancel");
+    var submit = document.getElementById("submit");
+
+    var basic_opts = {
+        mapKey: 'room',
+    };
+    var initial_opts = $.extend({}, basic_opts,
+        {
+            staticState: true,
+            fill: false,
+            stroke: true,
+            strokeWidth: 5,
+            strokeColor: 'black',
+            onClick: function (evt) {
+                var room = evt.key;
+                select_room(room)
+            },
+            onMouseover: function (evt) {
+                var room = evt.key;
+                highlightArea(room);
+            },
+            onMouseout: function (evt) {
+                var room = evt.key;
+                highlightAreaX(room);
+            }
+        });
+
+    map = $('#B2').mapster(initial_opts)
+    $.ajax({
+        url: "{% url 'esp8266:room_color' %}",
+        type: "GET",
+        success: function (response) {
+            var rooms = response.rooms
+            var colors = response.colors
+            for (i = 0; i < rooms.length; i++) {
+                map.mapster('set', true, rooms[i], {
+                    fill: true,
+                    fillColor: colors[i],
+                    fillOpacity: 0.5,
+                })
+            }
+        },
+    });
+
+
+    function highlightArea(key) {
+        $('area[room=' + key + ']').mouseenter();
+        map.mapster('set', true, key, {
+            fillOpacity: 0.8,
+        })
+    }
+
+    function highlightAreaX(key) {
+        $('area[room=' + key + ']').mouseout();
+        map.mapster('set', true, key, {
+            fillOpacity: 0.5,
+        })
+    }
+
+    function select_room(room) {
+        modal.style.display = "block"
+        $(function () {
+            $('.bs-timepicker').timepicker();
+        });
+        $.ajax({
+            url: "{% url 'esp8266:room_get' %}",
+            type: "POST",
+            data: {
+                room: room,
+            },
+        success: function (response) {
+                var information = JSON.parse(response["room"]);
+                var fields = information[0]["fields"];
+                mySlider.setValues(parseInt(fields["min_temp"]), parseInt(fields["max_temp"]))
+                $('#start-time').val(fields["start"].substring(0, 5))
+                $('#stop-time').val(fields["stop"].substring(0, 5))
+            },
+        error: function(status, exception) {
+             window.alert(exception);
+            },
+        });
+
+        var mySlider = new rSlider({
+            target: '#slider',
+            values: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+            range: true, // range slider
+            set: null,
+            width: 800,
+            scale: true,
+            labels: true,
+            tooltip: true,
+            onChange: function (evt) {
+            }
+        });
+        cancel.onclick = function () {
+            modal.style.display = "none"
+            mySlider.destroy()
+    },
+        submit.onclick = function (){
+            $.ajax({
+                url: "{% url 'esp8266:room_post' %}",
+                type: "POST",
+                data: {
+                    room: room,
+                    range: mySlider.getValue(),
+                    start: $('#start-time').val(),
+                    stop: $('#stop-time').val(),
+                },
+                success: function (response) {
+                    window.alert(response);
+                },
+                error: function(status, exception) {
+                    window.alert(exception);
+                },
+            });
+            modal.style.display = "none"
+            mySlider.destroy()
+            }
+    }
+
+    setInterval(function () {
+        $.ajax({
+            url: "{% url 'esp8266:room_color' %}",
+            type: "GET",
+            success: function (response) {
+                var rooms = response.rooms
+                var colors = response.colors
+                for (i = 0; i < rooms.length; i++) {
+                    map.mapster('set', true, rooms[i], {
+                        fill: true,
+                        fillColor: colors[i],
+                        fillOpacity: 0.5,
+                    })
+                }
+            },
+        });
+    }, 5000);
+
+
+
+</script>
+{% endblock %}
+
+</body>
+</html>

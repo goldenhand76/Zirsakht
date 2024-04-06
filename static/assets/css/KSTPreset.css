@@ -1,0 +1,171 @@
+body {
+    font-family: 'iransans', iransanslight;
+    font-size: 18px;
+    color: #000;
+    position: relative;
+    font-weight: 500;
+    padding: 0;
+    margin: 0
+}
+
+a, a:hover {
+    text-decoration: none
+}
+
+input, button, select, textarea {
+    line-height: inherit;
+    font-family: inherit;
+    font-size: inherit
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: inherit;
+    line-height: 25px;
+    font-weight: 500;
+    color: inherit
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+:before, :after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+input[type=checkbox] {
+         position: relative;
+	       cursor: pointer;
+    }
+    input[type=checkbox]:before {
+         content: "";
+         display: block;
+         position: absolute;
+         width: 16px;
+         height: 16px;
+         top: 0;
+         left: 0;
+         border: 2px solid #555555;
+         border-radius: 3px;
+         background-color: white;
+}
+    input[type=checkbox]:checked:after {
+         content: "";
+         display: block;
+         width: 5px;
+         height: 10px;
+         border: solid black;
+         border-width: 0 2px 2px 0;
+         -webkit-transform: rotate(45deg);
+         -ms-transform: rotate(45deg);
+         transform: rotate(45deg);
+         position: absolute;
+         top: 2px;
+         left: 6px;
+}
+
+
+button, html input[type="button"], input[type="reset"], input[type="submit"] {
+    -webkit-appearance: button;
+    cursor: pointer
+}
+
+button[disabled], html input[disabled] {
+    cursor: default
+}
+
+button {
+    padding: 0;
+    margin: 0
+}
+
+button:focus, input:focus {
+    outline: none;
+    box-shadow: none
+}
+
+.button-reset {
+    border: none;
+    background: none;
+    border-radius: 0
+}
+
+ol, ul {
+    list-style: none;
+    padding: 0;
+    margin: 0
+}
+
+aside, footer, header, main, nav, section {
+    display: block
+}
+
+.hide {
+    display: none
+}
+
+.show {
+    display: block
+}
+
+.left {
+    float: left
+}
+
+.right {
+    float: right
+}
+
+.text-left {
+    text-align: left
+}
+
+.text-right {
+    text-align: right
+}
+
+.text-center {
+    text-align: center
+}
+
+.text-justify {
+    text-align: justify
+}
+
+.text-indent {
+    text-indent: -99999em
+}
+
+.grid {
+    width: 100%;
+    max-width: 1110px;
+    display: block;
+    margin: 0 auto
+}
+
+.inline-block {
+    display: inline-block
+}
+
+.block {
+    display: block
+}
+
+fieldset {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border: none
+}
+
+.rtl {
+    direction: rtl
+}

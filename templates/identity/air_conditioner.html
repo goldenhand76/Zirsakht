@@ -1,0 +1,393 @@
+{% extends "Dashboard/templates/layouts/base.html" %}
+
+{% load static %}
+
+{% block title %} مشعل {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+<link rel="stylesheet" href='{% static ' assets/css/Toggle-Button.css' %}">
+<link rel="stylesheet" href='{% static "assets/css/range-slider-master/css/rSlider.min.css" %}'>
+<link rel="stylesheet" href="{% static 'assets/user-friendly-time-picker/dist/css/timepicker.min.css' %}"/>
+
+<style>
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    }
+
+    .modal-content {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 50px;
+        border: 3px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+    }
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="content">
+    <div class="page-inner">
+
+        <div id="myModal" class="modal">
+            <div class="modal-content"
+                 style="width: 50vw; margin: 0 auto; background-color: rgba(41,41,41,0.9)">
+                <div style="margin: 20px auto">
+                    <label style="direction: rtl; display: block; text-align-last: center" for="repair_man">کارشناس فنی
+                        را انتخاب کنید: </label>
+                    <select id="repair_man" class="rounded-1 custom-select custom-select-lg bg-dark text-white"
+                            autofocus>
+                        {% for repairman in repairmans %}
+                        <option value='{{ repairman.id }}'>{{ repairman.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="margin: 10px auto;">
+                    <label style="direction: rtl; display: block; text-align-last: center" for="repair_explain">شرح
+                        اقدامات را وارد کنید: </label>
+                    <textarea id="repair_explain"
+                              style="background-color: rgba(0,0,0,0.3); color: white; resize: none; width: 30vw; direction: rtl"
+                              maxlength="200" placeholder="200 کارکتر مجاز است">
+            </textarea>
+                </div>
+                <div style="margin: 10px auto;">
+                    <label style="direction: rtl; display: block; text-align-last: center" for="test_date_id">تاریخ را
+                        وارد کنید: </label>
+                    <input id="test_date_id"
+                           style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center"
+                           type="text" autocomplete="off">
+                </div>
+                <div style="display: flex; margin: 20px auto; direction: rtl">
+                    <button id="close" style="width: 5rem;">انصراف</button>
+                    <button name="Submit" onclick="add_repair()" style="width: 5rem;">تایید</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-header bg-primary-gradient">
+            <div class="page-inner py-5">
+            </div>
+        </div>
+
+        <div class="page-inner mt--5">
+            <div class="row mt--2" style="direction: rtl">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header" style="direction: rtl">
+                            <div class="card-head-row">
+                                <div class="card-title text-right">انتخاب مشعل</div>
+                            </div>
+                        </div>
+                        <select id="select" class="rounded-1 custom-select custom-select-lg bg-dark text-white" autofocus>
+                            <option disabled selected value> هواساز را انتخاب کنید</option>
+                            {% for air_conditioner in air_conditioners %}
+                                <option value='{{ air_conditioner.id }}'>{{ air_conditioner.device }} - {{ air_conditioner.code }} - {{ air_conditioner.producer }}
+                                    - {{ air_conditioner.location }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt--2" style="direction: rtl">
+                <div class="col-md-4">
+                    <div class="card full-height">
+                        <div class="card-header" style="direction: rtl">
+                            <div class="card-head-row">
+                                <div class="card-title text-right">مشخصات عمومی</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table-borderless text-center d-xl-flex justify-content-xl-end"
+                                 style="margin-top: 21px;">
+                                <table class="table table-striped mt-3" style="direction: rtl;">
+                                    <tbody>
+                                    <tr>
+                                        <td style="text-align: right">نام دستگاه:</td>
+                                        <td id="name"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right; ">کد دستگاه:</td>
+                                        <td id="code" style="font-family: Arial, Helvetica, sans-serif"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">محل نصب:</td>
+                                        <td id="location"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">سازنده:</td>
+                                        <td id="producer"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">نوع:</td>
+                                        <td id="_type"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">سریال:</td>
+                                        <td id="serial" style="font-family: Arial, Helvetica, sans-serif"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">مدل:</td>
+                                        <td id="model" style="font-family: Arial, Helvetica, sans-serif"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">راه اندازی:</td>
+                                        <td id="since"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">وضعیت:</td>
+                                        <td id="status"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card full-height">
+                        <div class="card-header" style="direction: rtl">
+                            <div class="card-head-row">
+                                <div class="card-title text-right">تصویر دستگاه</div>
+                            </div>
+                        </div>
+                        <div class="card-body" style="margin: auto auto;">
+                            <div id="image"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row mt--2" style="direction: rtl">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header" style="direction: rtl">
+                            <div class="card-head-row">
+                                <div class="card-title text-right">مشخصات فنی</div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="table-responsive table-borderless text-center d-xl-flex justify-content-xl-end"
+                                 style="margin-top: 21px;">
+                                <table class="table table-striped mt-3" style="direction: rtl;">
+                                    <tbody>
+                                    <tr>
+                                        <td style="text-align: right">تعداد موتور</td>
+                                        <td id="motor_quantity"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right; ">توان موتور</td>
+                                        <td id="motor_power"
+                                            style="font-family: Arial, Helvetica, sans-serif"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">تعداد فن</td>
+                                        <td id="fan_quantity"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">سرعت فن</td>
+                                        <td id="fan_speed"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">سایز فن</td>
+                                        <td id="fan_size"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">کویل سرمایشی</td>
+                                        <td id="coil_cool" style="font-family: Arial, Helvetica, sans-serif"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">کویل گرمایشی</td>
+                                        <td id="coil_warm" style="font-family: Arial, Helvetica, sans-serif"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">کویل پیش گرمایش</td>
+                                        <td id="coil_pre_warm"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">جریان هوا</td>
+                                        <td id="flow_rate"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">TSP</td>
+                                        <td id="TSP"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: right;">ESP</td>
+                                        <td id="ESP"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card full-height">
+                        <div class="card-header" style="direction: rtl">
+                            <div class="card-head-row">
+                                <div class="card-title text-right">تاریخچه تعمیرات</div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive text-center">
+                                <table class="table table-striped table-striped-bg-default mt-3" style="direction: rtl">
+                                    <thead>
+                                    <tr class="text-white font-weight-bold">
+                                        <th style="width: 60%;"><a type="button"
+                                                                   onclick="sort_repair('explain')">شرح</a></th>
+                                        <th><a type="button" onclick="sort_repair('repairman')">تعمیرکار</a></th>
+                                        <th><a type="button" onclick="sort_repair('date')">تاریخ</a></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    </tbody>
+                                </table>
+                                <input type="hidden" id="ascending" value="true">
+                                <input type="hidden" id="sort_repair_url" data-url="{% url 'identity:sort_repair' %}"/>
+
+                                <a class="text-center" href="#" id="myBtn">
+                                    <input type="hidden" id="add_repair_url"
+                                           data-url="{% url 'identity:add_repair' %}"/>
+                                    <p>افزودن
+                                        <img src="{% static '/assets/img/icons8-plus-40.png' %}"
+                                             style="width: 30px;height: 30px;"/>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+
+<script src="{% static 'assets/js/sort.js' %}"></script>
+<script src="{% static 'assets/js/jalali_calander/src/kamadatepicker.js' %}"></script>
+<script>kamaDatepicker('test_date_id', {markToday: true, position: 'top', pastYearsCount: 1});</script>
+<script>
+    $(document).ready(function () {
+        $(function () {
+            $('#select').val(1);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'identity:air_conditioner_page' %}",
+                data: {
+                    'air_conditioner': $('#select').val(),
+                },
+                success: function (response) {
+                    var repairs = JSON.parse(response["repairs"]);
+                    var air_conditioner = JSON.parse(response["air_conditioner"]);
+                    $("#tbody").empty();
+                    for (i = 0; i < repairs.length; i++) {
+                        var field = repairs[i]["fields"];
+                        var date = new Date(field["date"]);
+                        $("#tbody").append("<tr><td style='text-align: right'><a style=\"font-family: 'B Nazanin'\"  type=\"button\" href=\"../edit_repair/" + repairs[i]["pk"] + "/\">" + field["explain"] +
+                            "</a></td><td style=\"font-family: 'B Nazanin'\" >" + field["repairman"] +
+                            "</td><td style=\"font-family: 'B Nazanin'\" >" + date.toLocaleDateString('fa-IR') + "</td></tr>");
+                    }
+                    var fields = air_conditioner[0]["fields"];
+                    var image = fields["card"];
+                    $('#image').html('<img class="img-fluid" style="height: 500px; object-fit: contain;" src="/media/' + image + '" />');
+                    $('#name').html(fields["device"]);
+                    $('#code').html(fields["code"]);
+                    $('#location').html(fields["location"]);
+                    $('#producer').html(fields["producer"]);
+                    $('#_type').html(fields["_type"]);
+                    $('#serial').html(fields["serial"]);
+                    $('#model').html(fields["model"]);
+                    $('#since').html(fields["since"]);
+                    if (fields["status"] === true) {
+                        $('#status').html('روشن');
+                    } else {
+                        $('#status').html('خاموش');
+                    }
+
+                    $('#motor_quantity').html(fields["motor_quantity"]);
+                    $('#motor_power').html(fields["motor_power"] + '<span> hp</span>');
+                    $('#fan_quantity').html(fields["fan_quantity"]);
+                    $('#fan_speed').html(fields["fan_speed"] + '<span> RPM</span>');
+                    $('#fan_size').html(fields["fan_size"] + '<span> inch</span>');
+                    $('#coil_cool').html(fields["coil_cool"]);
+                    $('#coil_warm').html(fields["coil_warm"]);
+                    $('#coil_pre_warm').html(fields["coil_pre_warm"]);
+                    $('#flow_rate').html(fields["flow_rate"] + '<span> CFM</span>');
+                    $('#TSP').html(fields["TSP"] + '<span> WG</span>');
+                    $('#ESP').html(fields["ESP"] + '<span> WG</span>');
+
+                }
+            });
+        });
+
+        $("#select").change(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'identity:air_conditioner_page' %}",
+                data: {
+                    'air_conditioner': $('#select').val(),
+                },
+                success: function (response) {
+                    var air_conditioner = JSON.parse(response["air_conditioner"]);
+                    var repairs = JSON.parse(response["repairs"]);
+                    $("#tbody").empty();
+                    for (i = 0; i < repairs.length; i++) {
+                        var field = repairs[i]["fields"];
+                        var date = new Date(field["date"]);
+                        $("#tbody").append("<tr><td style='text-align: right'><a style=\"font-family: 'B Nazanin'\"  type=\"button\" href=\"../edit_repair/" + repairs[i]["pk"] + "/\">" + field["explain"] +
+                            "</a></td><td style=\"font-family: 'B Nazanin'\" >" + field["repairman"] +
+                            "</td><td style=\"font-family: 'B Nazanin'\" >" + date.toLocaleDateString('fa-IR') + "</td></tr>");
+                    }
+                    var fields = air_conditioner[0]["fields"];
+                    var image = fields["card"];
+                    $('#image').html('<img class="img-fluid" style="height: 500px; object-fit: contain;" src="/media/' + image + '" />');
+                    $('#name').html(fields["device"]);
+                    $('#code').html(fields["code"]);
+                    $('#location').html(fields["location"]);
+                    $('#producer').html(fields["producer"]);
+                    $('#_type').html(fields["_type"]);
+                    $('#serial').html(fields["serial"]);
+                    $('#model').html(fields["model"]);
+                    $('#since').html(fields["since"]);
+                    if (fields["status"] === true) {
+                        $('#status').html('روشن');
+                    } else {
+                        $('#status').html('خاموش');
+                    }
+
+                    $('#motor_quantity').html(fields["motor_quantity"]);
+                    $('#motor_power').html(fields["motor_power"] + '<span> hp</span>');   
+                    $('#fan_quantity').html(fields["fan_quantity"]);
+                    $('#fan_speed').html(fields["fan_speed"] + '<span> RPM</span>');     
+                    $('#fan_size').html(fields["fan_size"] + '<span> inch</span>'); 
+                    $('#coil_cool').html(fields["coil_cool"]);     
+                    $('#coil_warm').html(fields["coil_warm"]);
+                    $('#coil_pre_warm').html(fields["coil_pre_warm"]);
+                    $('#flow_rate').html(fields["flow_rate"] + '<span> CFM</span>');
+                    $('#TSP').html(fields["TSP"] + '<span> WG</span>');     
+                    $('#ESP').html(fields["ESP"] + '<span> WG</span>');
+                }
+            });
+            return false;
+        });
+    });
+</script>
+{% endblock javascripts %}

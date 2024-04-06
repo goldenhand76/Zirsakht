@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+{% extends 'home/base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% block content %}
+    <div style="display: flex ; direction: rtl; text-align: right">
+        <div style="margin: 0 auto;width: 100%;height: initial;">
+
+            <a href="{% url 'identity:boiler_page' %}" title="بویلر">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/boiler.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:pump_page' %}" title="موتور پمپ">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/pomp.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:pump_linear_page' %}" title="پمپ خطی">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/linear_pump.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:domestic_hot_water_page' %}" title="منبع کویل دار">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/coil_tank.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:water_softener_page' %}" title="سختی گیر">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/water_softener.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:expansion_page' %}" title="منبع انبساط">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/expansion_tank_close.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:chiller_page' %}" title="چیلر">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/hiclipart.com.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:cooling_tower_page' %}" title="برج خنک کن">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/condenser.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:air_conditioner_page' %}" title="هواساز">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/air_condition.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:generator_page' %}" title="جنراتور دیزل">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/generator.png"/>
+                </button>
+            </a>
+
+            <a href="{% url 'identity:fancoil_page' %}" title="فن کویل">
+                <button class="identity-list">
+                    <img style="width: 310px;height: 215px; object-fit: contain;"
+                         src="/media/media/identity/fancoil.png"/>
+                </button>
+            </a>
+
+
+        </div>
+    </div>
+{% endblock content %}
+
+</body>
+</html>

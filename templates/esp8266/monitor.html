@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+{% extends 'home/base.html' %}
+{% load last_update %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% block content %}
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            transform: translateX(-30px)
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/static/assets/img/computer-icons-button-clip-art-turn-off-ico-download-1d4157047a628b7e05ddd472c57399dd.png') center / cover no-repeat;
+            transition: 0.1s;
+        }
+
+        #toggle-motor:checked + .slider {
+            background-color: #4ef336;
+            -webkit-animation: glow-green 1s ease-in-out infinite alternate;
+            -moz-animation: glow-green 1s ease-in-out infinite alternate;
+            animation: glow-green 1s ease-in-out infinite alternate;
+        }
+
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+
+        @-webkit-keyframes glow-green {
+            from {
+                box-shadow: 0 0 1px #fff, 0 0 2px #ffffff, 0 0 3px #aee695, 0 0 4px #49e638;
+            }
+
+            to {
+                box-shadow: 0 0 3px #fff, 0 0 6px #ccff1f, 0 0 9px #9dff4f, 0 0 12px #1bff08;
+            }
+        }
+
+    </style>
+
+    <style>
+        .switch2 {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            transform: translateX(150px)
+        }
+
+        /* Hide default HTML checkbox */
+        .switch2 input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The slider */
+        .slider2 {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/static/assets/img/auto.png') center / cover no-repeat;
+            transition: .4s;
+        }
+
+        input:checked + .slider2 {
+            background-color: #2196F3;
+            -webkit-animation: glow-blue 1s ease-in-out infinite alternate;
+            -moz-animation: glow-blue 1s ease-in-out infinite alternate;
+            animation: glow-blue 1s ease-in-out infinite alternate;
+        }
+
+
+        .slider2.round2 {
+            border-radius: 34px;
+        }
+
+
+        .slider2.round2:before {
+            border-radius: 50%;
+        }
+
+        @-webkit-keyframes glow-blue {
+            from {
+                box-shadow: 0 0 1px #fff, 0 0 2px #ffffff, 0 0 3px #4fa9e6, 0 0 4px #2662e6;
+            }
+
+            to {
+                box-shadow: 0 0 5px #fff, 0 0 10px #36beff, 0 0 15px #308bff, 0 0 20px #3835ff;
+            }
+        }
+    </style>
+
+    <div class="chart-container"
+         style="direction: rtl;margin: 0 auto ;height:900px; width:1600px; background: url({% static "assets/img/solid_dark.jpg" %}) center / contain no-repeat ; border-radius: 10px">
+        <div style="display: flex;">
+            <h3 style="position: absolute; direction: rtl; transform: translateY(30px) translateX(-10px); color: white">آخرین بروزرسانی:
+                <span>{% last last_update %}</span></h3>
+            <div class="motor" style="margin: 10px auto">
+                <label class="switch" style="transform: translateX(320px) translateY(60px); position: sticky">
+                    <input id="toggle-motor" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <!-- Rounded switch -->
+                <label class="switch2" style="transform: translateX(385px) translateY(140px); position: sticky">
+                    <input id="toggle-auto" type="checkbox">
+                    <span class="slider2 round2"></span>
+                </label>
+            </div>
+
+            <div style="transform: translateX(650px) translateY(50px); position: sticky">
+                <img src= "{% static '/assets/img/pngwing.com.png' %}" width="400px" style="position: absolute; transform: translateX(76px) translateY(-10px); z-index: -1">
+                <div id="speed-gauge-textfield"
+                         style="color: white; position:absolute; font-size: 2rem; top: 150px; right: 118px"></div>
+                <p style="color: white; position:absolute; font-size: 1.2rem; top: 180px; right: 112px">RPS</p>
+                <p style="color: white; position:absolute;font-family: 'DejaVu Sans Light'; font-size: 1.5rem; top: 250px; right: 95px">Speed</p>
+                <img src= "{% static '/assets/img/SeekPng.com_gauge-png_2184670.png' %}" width="222px" style="position: absolute; top: 5px; right: 14px">
+                    <canvas id="speed-gauge" style="width: 250px; height: 200px"></canvas>
+            </div>
+
+            <div style="transform: translateX(400px) translateY(50px); position: sticky">
+                <img src= "{% static '/assets/img/pngwing.com.png' %}" width="400px" style="position: absolute; transform: translateX(76px) translateY(-10px); z-index: -1">
+                    <div id="temp-gauge-textfield"
+                         style="color: white; position:absolute; font-size: 2rem; top: 150px; right: 112px"></div>
+                    <p style="color: white; position:absolute; font-size: 1.2rem; top: 180px; right: 115px">&#8451;</p>
+                <p style="color: white; position:absolute;font-family: 'DejaVu Sans Light'; font-size: 1.5rem; top: 250px; right: 95px">Temp</p>
+                <a onclick="fAbreGuias('temp-charts')">
+                <img src= "{% static '/assets/img/SeekPng.com_gauge-png_2184670.png' %}" width="222px" style="position: absolute; top: 5px; right: 14px">
+                </a>
+                <canvas id="temp-gauge" style="width: 250px; height: 200px"></canvas>
+            </div>
+
+            <div style="transform: translateX(150px) translateY(50px); position: sticky">
+                <img src= "{% static '/assets/img/pngwing.com.png' %}" width="400px" style="position: absolute; transform: translateX(76px) translateY(-10px); z-index: -1">
+                    <div id="angle-gauge-textfield"
+                         style="color: white; position:absolute; font-size: 2rem; top: 150px; right: 108px; direction:ltr"></div>
+                    <p style="color: white; position:absolute; font-size: 1.2rem; top: 180px; right: 108px">DEG</p>
+                <p style="color: white; position:absolute;font-family: 'DejaVu Sans Light'; font-size: 1.5rem; top: 250px; right: 95px">Angle</p>
+                <img src= "{% static '/assets/img/SeekPng.com_gauge-png_2184670.png' %}" width="222px" style="position: absolute; top: 5px; right: 14px">
+                    <canvas id="angle-gauge" style="width: 250px; height: 200px"></canvas>
+            </div>
+
+        </div>
+
+        <div id="temp-charts" style="border-radius: 20px; width: 850px; margin: 0 auto; display: none; background-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0.8)); transform: translateY(80px) translateX(-25px)">
+            <div style="height: 300px;display: flex; direction: ltr; width: 100%; margin: 0 auto">
+                <div style="width: 100%;  margin: 0 auto">
+                    <canvas id="temp-chart"></canvas>
+                </div>
+            </div>
+            <div style="height: 300px;display: flex; direction: ltr; width: 100%; margin: 0 auto">
+                <div style="width: 100%;  margin: 0 auto">
+                    <canvas id="speed-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fAbreGuias(id) {
+            var vGuias = document.getElementById(id);
+            if (vGuias.style.display === "block") { // if vGuias hidden, display it
+                vGuias.style.display = "none";
+            } else { // if vGuias displayed, hidden it
+                vGuias.style.display = "block";
+            }
+        }
+    </script>
+
+    <script type="text/javascript" src="{% static 'assets/js/gauge.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'esp8266:motor' %}",
+                data: {},
+                success: function (response) {
+                    var motor = JSON.parse(response["motor"]);
+                    var status = motor[0]["fields"]["status"];
+                    var auto = motor[0]["fields"]["auto"];
+                    document.getElementById("toggle-motor").checked = status === true;
+                    document.getElementById("toggle-auto").checked = auto === true;
+                }
+            });
+            return false;
+        });
+
+        $('#toggle-motor').click(function (event) {
+            event.preventDefault();
+            status = document.getElementById("toggle-motor").checked;
+            auto = document.getElementById("toggle-auto").checked;
+            $.ajax({
+                type: "POST",
+                url: "{% url 'esp8266:change' %}",
+                data: {"status": status, "auto": auto},
+                success: function (response) {
+                    var motor = JSON.parse(response["motor"]);
+                    var status = motor[0]["fields"]["status"];
+                    var auto = motor[0]["fields"]["auto"];
+                    document.getElementById("toggle-motor").checked = status === true;
+                    document.getElementById("toggle-auto").checked = auto === true;
+                }
+            });
+        });
+        $('#toggle-auto').click(function (event) {
+            event.preventDefault();
+            status = document.getElementById("toggle-motor").checked;
+            auto = document.getElementById("toggle-auto").checked;
+            $.ajax({
+                type: "POST",
+                url: "{% url 'esp8266:change' %}",
+                data: {"status": status, "auto": auto},
+                success: function (response) {
+                    var motor = JSON.parse(response["motor"]);
+                    var status = motor[0]["fields"]["status"];
+                    var auto = motor[0]["fields"]["auto"];
+                    document.getElementById("toggle-motor").checked = status === true;
+                    document.getElementById("toggle-auto").checked = auto === true;
+                }
+            });
+        })
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'esp8266:aircondition_1' %}",
+                    data:{},
+                    success: function (response) {
+                        window.temp_gauge.set(response.temps[response.temps.length - 1]);
+                        window.angle_gauge.set(response.angles[response.angles.length - 1]);
+                        window.speed_gauge.set(response.speeds[response.speeds.length - 1]);
+
+                        var ctx = document.getElementById('temp-chart').getContext('2d');
+                        var ctx2 = document.getElementById('speed-chart').getContext('2d');
+
+                        if (window.chart1 !== undefined)
+                            window.chart1.destroy();
+                        if (window.chart2 !== undefined)
+                            window.chart2.destroy();
+
+                        window.chart1 = new Chart(ctx, {
+                            type: 'line',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
+                            data: {
+                                labels: response.dates,
+                                datasets: [{
+                                    label: 'AirConditioner1',
+                                    data: response.temps,
+                                    backgroundColor: 'rgba(0,0,0,0)',
+                                    borderColor: 'rgb(51,191,65)',
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                elements: {
+                                    point: {
+                                        radius: 0
+                                    }
+                                },
+                                tooltips: {
+                                    mode: 'label',
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        gridLines: {
+                                            zeroLineColor: "transparent"
+                                        },
+                                        ticks: {
+                                            autoSkip: true,
+                                            source: 'auto',
+                                            maxTicksLimit: 12,
+                                            padding: 10,
+                                            fontStyle: "500"
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        scaleLabel: {
+                                            display: true,
+                                            fontSize: 16,
+                                            labelString: 'Temperature (C)'
+                                        },
+                                        gridLines: {
+                                            color: "rgba(255,255,255,0.2)",
+                                            zeroLineColor: "rgba(255,255,255,0.5)"
+                                        },
+                                        ticks: {
+                                            fontStyle: "500",
+                                            beginAtZero: true,
+                                            maxTicksLimit: 5,
+                                            padding: 10
+                                        }
+                                    }]
+                                },
+                                title: {
+                                    display: true,
+                                    position: 'top',
+                                    text: 'دمای کویل',
+                                    fontColor: 'white',
+                                    fontFamily: 'B Nazanin',
+                                    fontSize: 20
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'right',
+                                    labels: {
+                                        fontColor: 'white',
+                                    }
+                                },
+                            }
+                        });
+                        window.chart2 = new Chart(ctx2, {
+                            type: 'line',// bar, horizontalBar, pie, line, doughnut, radar, polarArea
+                            data: {
+                                labels: response.dates,
+                                datasets: [{
+                                    label: 'AirConditioner1',
+                                    data: response.speeds,
+                                    backgroundColor: 'rgba(0,0,0,0)',
+                                    borderColor: 'rgb(51,191,191)',
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                elements: {
+                                    point: {
+                                        radius: 0
+                                    }
+                                },
+                                tooltips: {
+                                    mode: 'label',
+                                },
+                                hover: {
+                                    mode: 'nearest',
+                                    intersect: true
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        gridLines: {
+                                            zeroLineColor: "transparent"
+                                        },
+                                        ticks: {
+                                            autoSkip: true,
+                                            source: 'auto',
+                                            maxTicksLimit: 12,
+                                            padding: 10,
+                                            fontStyle: "500"
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        scaleLabel: {
+                                            display: true,
+                                            fontSize: 16,
+                                            labelString: 'Speed (RPS)'
+                                        },
+                                        gridLines: {color: "rgba(255,255,255,0.2)", zeroLineColor: "rgba(255,255,255,0.5)"},
+                                        ticks: {
+                                            max: 12,
+                                            beginAtZero: true,
+                                            stepSize: 2,
+                                        }
+                                    }]
+                                },
+
+                                title: {
+                                    display: true,
+                                    position: 'top',
+                                    text: 'سرعت فن',
+                                    fontColor: 'white',
+                                    fontFamily: 'B Nazanin',
+                                    fontSize: 20
+                                },
+                                legend: {
+                                    display: false,
+                                    position: 'right',
+                                    labels: {
+                                        fontColor: 'white',
+                                    }
+                                },
+                            }
+                        })
+                    }
+                });
+                return false;
+            },
+        );
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var speed_opts = {
+                angle: -0.2, // The span of the gauge arc
+                lineWidth: 0.3, // The line thickness
+                radiusScale: 1, // Relative radius
+                pointer: {
+                    length: 0.35, // // Relative to gauge radius
+                    strokeWidth: 0.035, // The thickness
+                    color: '#ffffff' // Fill color
+                },
+                limitMax: true,     // If false, max value increases automatically if value > maxValue
+                limitMin: true,     // If true, the min value of the gauge will be fixed
+                colorStart: '#6F6EA0',   // Colors
+                colorStop: '#C0C0DB',    // just experiment with them
+                strokeColor: '#EEEEEE',  // to see which ones work best for you
+                generateGradient: true,
+                highDpiSupport: true,     // High resolution support
+                // renderTicks is Optional
+                renderTicks: {
+                    divisions: 12,
+                    divWidth: 1.1,
+                    divLength: 0.7,
+                    divColor: '#333333',
+                    subDivisions: 1,
+                    subLength: 0.5,
+                    subWidth: 1.3,
+                    subColor: '#666666'
+                },
+                percentColors: [[0.0, "#a9d70b"], [0.50, "#f9c802"], [1.0, "#ff0000"]],
+                staticLabels: {
+                    font: "14px sans-serif",  // Specifies font
+                    labels: [0, 2, 4, 6, 8, 10, 12],  // Print labels at these values
+                    color: "#ffffff",  // Optional: Label text color
+                    fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+                },
+                staticZones: [
+                    {strokeStyle: "#f7ff00", min: 0, max: 8}, // Red from 100 to 130
+                    {strokeStyle: "#00ff10", min: 8, max: 12}, // Green
+                ],
+
+            };
+            var speed = document.getElementById('speed-gauge'); // your canvas element
+            window.speed_gauge = new Gauge(speed).setOptions(speed_opts); // create sexy gauge!
+            document.getElementById('speed-gauge-textfield').className = "speed-gauge-textfield";
+            window.speed_gauge.setTextField(document.getElementById("speed-gauge-textfield"));
+            window.speed_gauge.maxValue = 12; // set max gauge value
+            window.speed_gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+            window.speed_gauge.animationSpeed = 32; // set animation speed (32 is default value)
+
+            var temp_opts = {
+                angle: -0.2, // The span of the gauge arc
+                lineWidth: 0.3, // The line thickness
+                radiusScale: 1, // Relative radius
+                pointer: {
+                    length: 0.35, // // Relative to gauge radius
+                    strokeWidth: 0.035, // The thickness
+                    color: '#ffffff' // Fill color
+                },
+                limitMax: true,     // If false, max value increases automatically if value > maxValue
+                limitMin: true,     // If true, the min value of the gauge will be fixed
+                colorStart: '#6F6EA0',   // Colors
+                colorStop: '#C0C0DB',    // just experiment with them
+                strokeColor: '#EEEEEE',  // to see which ones work best for you
+                generateGradient: true,
+                highDpiSupport: true,     // High resolution support
+                // renderTicks is Optional
+                renderTicks: {
+                    divisions: 7,
+                    divWidth: 1.1,
+                    divLength: 0.7,
+                    divColor: '#333333',
+                    subDivisions: 5,
+                    subLength: 0.5,
+                    subWidth: 1.3,
+                    subColor: '#666666'
+                },
+                percentColors: [[0.0, "#a9d70b"], [0.50, "#f9c802"], [1.0, "#ff0000"]],
+                staticLabels: {
+                    font: "14px sans-serif",  // Specifies font
+                    labels: [0, 10, 20, 40, 50, 60, 70],  // Print labels at these values
+                    color: "#ffffff",  // Optional: Label text color
+                    fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+                },
+                staticZones: [
+                    {strokeStyle: "#1a9fef", min: 0, max: 30}, // Red from 100 to 130
+                    {strokeStyle: "#00ff10", min: 30, max: 60}, // Green
+                    {strokeStyle: "#ff0000", min: 60, max: 70}, // Yellow
+                ],
+
+            };
+            var temp = document.getElementById('temp-gauge'); // your canvas element
+            window.temp_gauge = new Gauge(temp).setOptions(temp_opts); // create sexy gauge!
+            document.getElementById('temp-gauge-textfield').className = "temp-gauge-textfield";
+            window.temp_gauge.setTextField(document.getElementById("temp-gauge-textfield"));
+            window.temp_gauge.maxValue = 70; // set max gauge value
+            window.temp_gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+            window.temp_gauge.animationSpeed = 32; // set animation speed (32 is default value)
+
+            var angle_opts = {
+                angle: -0.2, // The span of the gauge arc
+                lineWidth: 0.3, // The line thickness
+                radiusScale: 1, // Relative radius
+                pointer: {
+                    length: 0.35, // // Relative to gauge radius
+                    strokeWidth: 0.035, // The thickness
+                    color: '#ffffff' // Fill color
+                },
+                limitMax: true,     // If false, max value increases automatically if value > maxValue
+                limitMin: true,     // If true, the min value of the gauge will be fixed
+                colorStart: '#6F6EA0',   // Colors
+                colorStop: '#C0C0DB',    // just experiment with them
+                strokeColor: '#EEEEEE',  // to see which ones work best for you
+                generateGradient: true,
+                highDpiSupport: true,     // High resolution support
+                // renderTicks is Optional
+                renderTicks: {
+                    divisions: 3,
+                    divWidth: 1.1,
+                    divLength: 1,
+                    divColor: '#333333',
+                    subDivisions: 5,
+                    subLength: 0.8,
+                    subWidth: 1.3,
+                    subColor: '#666666'
+                },
+                percentColors: [[0.0, "#a9d70b"], [0.50, "#f9c802"], [1.0, "#ff0000"]],
+                staticLabels: {
+                    font: "14px sans-serif",  // Specifies font
+                    labels: [-75, -50, -25, 0],  // Print labels at these values
+                    color: "#ffffff",  // Optional: Label text color
+                    fractionDigits: 0.1,  // Optional: Numerical precision. 0=round off.
+                },
+                staticZones: [
+                    {strokeStyle: "#00087b", min: -75, max: -50}, // Red from 100 to 130
+                    {strokeStyle: "#0090ff", min: -50, max: 0}, // Yellow
+                ],
+
+            };
+            var angle = document.getElementById('angle-gauge'); // your canvas element
+            window.angle_gauge = new Gauge(angle).setOptions(angle_opts); // create sexy gauge!
+            document.getElementById('angle-gauge-textfield').className = "angle-gauge-textfield";
+            window.angle_gauge.setTextField(document.getElementById("angle-gauge-textfield"));
+            window.angle_gauge.maxValue = 0; // set max gauge value
+            window.angle_gauge.setMinValue(-75);  // Prefer setter over gauge.minValue = 0
+            window.angle_gauge.animationSpeed = 32; // set animation speed (32 is default value)
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+        setInterval(function () {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'esp8266:aircondition_1' %}",
+                data: {},
+                success: function (response) {
+                    window.chart1.data.datasets[0].data = response.temps;
+                    window.chart1.data.labels = response.dates;
+                    window.chart1.update();
+
+                    window.temp_gauge.set(response.temps[response.temps.length - 1]);
+                    window.speed_gauge.set(response.speeds[response.speeds.length - 1]);
+                    window.angle_gauge.set(response.angles[response.angles.length - 1]);
+
+                    window.chart2.data.datasets[0].data = response.speeds;
+                    window.chart2.data.labels = response.dates;
+                    window.chart2.update();
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{% url 'esp8266:motor' %}",
+                data: {},
+                success: function (response) {
+                    var motor = JSON.parse(response["motor"]);
+                    var status = motor[0]["fields"]["status"];
+                    var auto = motor[0]["fields"]["auto"];
+                    document.getElementById("toggle-motor").checked = status === true;
+                    document.getElementById("toggle-auto").checked = auto === true;
+                }
+            });
+        }, 30000);
+        })
+    </script>
+
+{% endblock content %}
+</body>
+</html>

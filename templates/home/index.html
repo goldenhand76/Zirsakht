@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+{% extends 'home/base.html' %}
+{% load static %}
+{% load deadline %}
+<html lang="en">
+<head>
+    <meta name="samandehi" content="122921362"/>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/NewStyle.css' %}">
+</head>
+<body>
+
+{% block content %}
+    <div class="row" style="direction: rtl;">
+        <div class="col-md-12">
+            <div>
+                <ul role="tablist" class="nav nav-tabs">
+                    <li role="presentation" class="nav-item"><a role="tab" data-toggle="tab" class="nav-link active"
+                                                                href="#tab-1">نامه ها</a></li>
+                    <li role="presentation" class="nav-item"><a role="tab" data-toggle="tab" class="nav-link"
+                                                                href="#tab-2">کمیته زیرساخت</a></li>
+                    <li role="presentation" class="nav-item"><a role="tab" data-toggle="tab" class="nav-link"
+                                                                href="#tab-3">کمیته استقرار</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab-1" style="overflow-x: auto; margin: 10px 0">
+
+                        <a class="text-right" href="#" id="add_letter">
+                            <input type="hidden" id="add_letter_url" data-url="{% url 'letter:add_letter' %}" />
+                            <img src="{% static '/assets/img/icons8-plus-40.png' %}" style="width: 30px;height: 30px;"/>
+                        </a>
+
+                    <div id="modal_letter" class="modal">
+                        <div class="modal-content"
+                             style="width: 50vw; margin: 0 auto; background-image: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.8))">
+
+                            <div style="direction: rtl;display: flex;margin: 5px auto">
+                                <label for="letter_subject" style="color: white">موضوع: </label>
+                                <input id="letter_subject" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+
+                                <label for="letter_receiver" style="color: white; padding-right: 30px">گیرنده: </label>
+                                <input id="letter_receiver" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+                            </div>
+
+                            <div style="direction: rtl;display: flex;margin: 5px auto">
+                                <label for="letter_number" style="color: white">شماره: </label>
+                                <input id="letter_number" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+
+                                <label for="letter_date" style="color: white; padding-right: 30px">تاریخ: </label>
+                                <input id="letter_date" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center" type="text" autocomplete="off">
+
+                                <label for="letter_deadline" style="color: white; padding-right: 30px">مهلت:</label>
+                                <input id="letter_deadline" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center" placeholder="روز">
+
+                            </div>
+
+                            <div style="direction: rtl;display: block; margin-top: 10px">
+                                <label for="letter_text" style="color: white">متن نامه: </label>
+                                <textarea id="letter_text" style="text-align:justify; white-space:normal; width: 50vw; height: 200px; background-color: rgba(0,0,0,0.3); color: white; text-align-last: right" type="text"></textarea>
+                            </div>
+
+                            <div style="display: flex; margin: 20px auto; direction: rtl">
+                                <button id="letter_close" style="width: 5rem;">انصراف</button>
+                                <button name="Submit" onclick="add_letter()" style="width: 5rem;">تایید</button>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="list-group text-right">
+                            <div class="list-group-item" style="text-align: right; width: border-box; margin-top: 10px">
+                                <a type="button" onclick="sort_letter('subject')">موضوع</a>
+                                <a type="button" onclick="sort_letter('receiver')" style="position: absolute; right: 20vw">گیرنده</a>
+                                <a type="button" onclick="sort_letter('number')" style="position: absolute; right: 40vw">شماره</a>
+                                <a type="button" onclick="sort_letter('date')" style="position: absolute; right: 60vw">مورخ</a>
+                                <a type="button" onclick="sort_letter('deadline')" style="position: absolute; right: 80vw">مهلت اقدام</a>
+                            </div>
+
+                            {% for letter in letters %}
+                                <button class="list-group-item list-group-item-action" id="button_{{ letter.id }}"
+                                        onclick="fAbreGuias('{{ letter.id }}', 'button_{{ letter.id }}')"
+                                        style="height: auto;">
+                                    <span style="position: relative; width: 10vw;">{{ letter.subject }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 20vw;">{{ letter.receiver }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 40vw;">{{ letter.number }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 60vw;">{% jalali_date letter.date %}</span>
+                                    <span style="position: absolute; width: 10vw;right: 80vw; color: {% color letter %}">{% deadline letter %}</span>
+                                </button>
+                                <div id='{{ letter.id }}'
+                                     style="display :none; height: auto; border: 1px solid rgba(0, 0, 0, .125); border-top-style: hidden">
+                                    <div style="margin-top: 20px;display: flex">
+                                        <p style="margin-right: 18px">متن نامه:</p>
+                                        <div style="border: 1px solid rgba(0, 0, 0, .125);border-radius: 2vh;background-color: rgba(255, 255, 255, 0.5); width: 50vw; height: auto; margin-right: 20px">
+                                            <p class="text-gray-700" style="margin: 10px">{{ letter.text|linebreaksbr }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-2" style="overflow-x: auto; margin: 10px 0">
+
+                        <a class="text-right" href="#" id="add_structure">
+                            <input type="hidden" id="add_structure_url" data-url="{% url 'letter:add_structure' %}" />
+                            <img src="{% static '/assets/img/icons8-plus-40.png' %}" style="width: 30px;height: 30px;"/>
+                        </a>
+
+                    <div id="modal_structure" class="modal">
+                        <div class="modal-content"
+                             style="width: 50vw; margin: 0 auto; background-image: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.8))">
+                            <div style="direction: rtl;display: flex;margin: 5px auto">
+                                <label for="structure_subject" style="color: white">موضوع: </label>
+                                <input id="structure_subject" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+
+                                <label for="structure_responsible" style="color: white; padding-right: 30px">اقدام کننده: </label>
+                                <input id="structure_responsible" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+                            </div>
+
+                            <div style="direction: rtl;display: flex;margin: 5px auto">
+                                <label for="structure_number" style="color: white">شماره: </label>
+                                <input id="structure_number" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+
+                                <label for="structure_date" style="color: white; padding-right: 30px">تاریخ: </label>
+                                <input id="structure_date" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center" type="text" autocomplete="off">
+
+                                <label for="structure_deadline" style="color: white; padding-right: 30px">مهلت:</label>
+                                <input id="structure_deadline" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center" placeholder="روز">
+                            </div>
+
+                            <div style="direction: rtl;display: block; margin-top: 10px">
+                                <label for="structure_text" style="color: white">مصوبه: </label>
+                                <textarea id="structure_text" style="text-align:justify; white-space:normal; width: 50vw; height: 200px; background-color: rgba(0,0,0,0.3); color: white; text-align-last: right" type="text"></textarea>
+                            </div>
+
+                            <div style="display: flex; margin: 20px auto; direction: rtl">
+                                <button id="structure_close" style="width: 5rem;">انصراف</button>
+                                <button name="Submit" onclick="add_structure()" style="width: 5rem;">تایید</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                        <div class="list-group text-right">
+                            <button class="list-group-item" style="flex-wrap: wrap; width: auto; text-align: right">
+                                <a type="button" onclick="sort_letter('subject')">موضوع</a>
+                                <a type="button" onclick="sort_letter('receiver')" style="position: absolute; right: 20vw">شماره جلسه</a>
+                                <a type="button" onclick="sort_letter('number')" style="position: absolute; right: 40vw">تاریخ</a>
+                                <a type="button" onclick="sort_letter('date')" style="position: absolute; right: 60vw">اقدام کننده</a>
+                                <a type="button" onclick="sort_letter('deadline')" style="position: absolute; right: 80vw">مهلت اقدام</a>
+                                <a type="button" onclick="sort_letter('status')" style="position: absolute; right: 90vw">وضعیت</a>
+                            </button>
+
+                            {% for structure in structures %}
+                                <button class="list-group-item list-group-item-action" id="button_{{ structure.id }}"
+                                        onclick="fAbreGuias('{{ structure.id }}', 'button_{{ structure.id }}')"
+                                        style="width: auto">
+                                    <span style="position: relative; width: 10vw;">{{ structure.subject }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 20vw;">{{ structure.number }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 40vw;">{% jalali_date structure.date %}</span>
+                                    <span style="position: absolute; width: 10vw;right: 60vw;">{{ structure.responsible }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 80vw; color: {% color structure %}">{% deadline structure %}</span>
+                                    <span style="position: absolute; width: 5vw;right: 90vw;"><img style="width: 30px;height: 30px; object-fit: contain;" src={% status structure.status %}>
+                                    </span>
+                                </button>
+                                <div id='{{ structure.id }}'
+                                     style="display :none; height: auto; border: 1px solid rgba(0, 0, 0, .125); border-top-style: hidden">
+                                    <div style="margin-top: 20px;display: flex">
+                                        <p style="margin-right: 18px">مصوبه:</p>
+                                        <div style="border: 1px solid rgba(0, 0, 0, .125);border-radius: 2vh;background-color: rgba(255, 255, 255, 0.5); width: 50vw; height: auto; margin-right: 20px">
+                                            <p class="text-gray-700" style="margin: 10px">{{ structure.text|linebreaksbr }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    <div role="tabpanel" class="tab-pane" id="tab-3" style="overflow-x: auto; margin: 10px 0">
+
+                        <a class="text-right" href="#" id="add_establish">
+                            <input type="hidden" id="add_establish_url" data-url="{% url 'letter:add_establish' %}" />
+                            <img src="{% static '/assets/img/icons8-plus-40.png' %}" style="width: 30px;height: 30px;"/>
+                        </a>
+
+                    <div id="modal_establish" class="modal">
+                        <div class="modal-content"
+                             style="width: 50vw; margin: 0 auto; background-image: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.8))">
+                            <div style="direction: rtl;display: flex;margin: 5px auto">
+                                <label for="establish_subject" style="color: white">موضوع: </label>
+                                <input id="establish_subject" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+
+                                <label for="establish_responsible" style="color: white; padding-right: 30px">اقدام کننده: </label>
+                                <input id="establish_responsible" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+                            </div>
+
+                            <div style="direction: rtl;display: flex;margin: 5px auto">
+                                <label for="establish_number" style="color: white">شماره: </label>
+                                <input id="establish_number" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center">
+
+                                <label for="establish_date" style="color: white; padding-right: 30px">تاریخ: </label>
+                                <input id="establish_date" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center" type="text" autocomplete="off">
+
+                                <label for="establish_deadline" style="color: white; padding-right: 30px">مهلت:</label>
+                                <input id="establish_deadline" type="text" style="background-color: rgba(0,0,0,0.3); color: white; text-align-last: center" placeholder="روز">
+                            </div>
+
+                            <div style="direction: rtl;display: block; margin-top: 10px">
+                                <label for="establish_text" style="color: white">متن نامه: </label>
+                                <textarea id="establish_text" style="text-align:justify; white-space:normal; width: 50vw; height: 200px; background-color: rgba(0,0,0,0.3); color: white; text-align-last: right" type="text"></textarea>
+                            </div>
+
+                            <div style="display: flex; margin: 20px auto; direction: rtl">
+                                <button id="establish_close" style="width: 5rem;">انصراف</button>
+                                <button name="Submit" onclick="add_establish()" style="width: 5rem;">تایید</button>
+                            </div>
+                        </div>
+
+                    </div>
+                        <div class="list-group text-right">
+                            <button class="list-group-item" style="flex-wrap: wrap; width: auto; text-align: right">
+                                <a type="button" onclick="sort_letter('subject')">موضوع</a>
+                                <a type="button" onclick="sort_letter('receiver')" style="position: absolute; right: 20vw">شماره جلسه</a>
+                                <a type="button" onclick="sort_letter('number')" style="position: absolute; right: 40vw">تاریخ</a>
+                                <a type="button" onclick="sort_letter('date')" style="position: absolute; right: 60vw">اقدام کننده</a>
+                                <a type="button" onclick="sort_letter('deadline')" style="position: absolute; right: 80vw">مهلت اقدام</a>
+                                <a type="button" onclick="sort_letter('status')" style="position: absolute; right: 90vw">وضعیت</a>
+                            </button>
+
+                            {% for establish in establishes %}
+                                <button class="list-group-item list-group-item-action" id="button_{{ establish.id }}"
+                                        onclick="fAbreGuias('{{ establish.id }}', 'button_{{ establish.id }}')"
+                                        style="flex-wrap: wrap; width: auto">
+                                    <span style="position: relative; width: 10vw;">{{ establish.subject }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 20vw;">{{ establish.number }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 40vw;">{% jalali_date establish.date %}</span>
+                                    <span style="position: absolute; width: 10vw;right: 60vw;">{{ establish.responsible }}</span>
+                                    <span style="position: absolute; width: 10vw;right: 80vw; color: {% color establish %}">{% deadline establish %}</span>
+                                    <span style="position: absolute; width: 5vw;right: 90vw;"><img style="width: 30px;height: 30px; object-fit: contain;" src={% status establish.status %}>
+                                </button>
+                                <div id='{{ establish.id }}'
+                                     style="display :none; height: auto; border: 1px solid rgba(0, 0, 0, .125); border-top-style: hidden">
+                                    <div style="margin-top: 20px;display: flex">
+                                        <p style="margin-right: 18px">متن مقررنامه:</p>
+                                        <div style="border: 1px solid rgba(0, 0, 0, .125);border-radius: 2vh;background-color: rgba(255, 255, 255, 0.5); width: 50vw; height: auto; margin-right: 20px">
+                                            <p class="text-gray-700" style="margin: 10px">{{ establish.text|linebreaksbr }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#    <nav id="menu">#}
+    {#        <input type="image" src="_imagens/menuesboco.png" onclick="fAbreGuias()"/>#}
+    {#        <ul id="guias">#}
+    {#            <li>Guia 1</li>#}
+    {#            <li>Guia 2</li>#}
+    {#            <li>Guia 3</li>#}
+    {#        </ul>#}
+    {#    </nav>#}
+    <script src="{% static 'assets/js/letter.js' %}"></script>
+    <script src="{% static 'assets/js/jalali_calander/src/kamadatepicker.js' %}"></script>
+    <script>kamaDatepicker('letter_date', { markToday: true, position: 'bottom', pastYearsCount: 1});</script>
+    <script>kamaDatepicker('structure_date', { markToday: true, position: 'bottom', pastYearsCount: 1});</script>
+    <script>kamaDatepicker('establish_date', { markToday: true, position: 'bottom', pastYearsCount: 1});</script>
+
+    <script>
+        function fAbreGuias(id, button) {
+            var vGuias = document.getElementById(id);
+            var button_border = document.getElementById(button);
+            if (vGuias.style.display === "block") { // if vGuias hidden, display it
+                vGuias.style.display = "none";
+                button_border.style.borderBottomColor = 'rgba(0, 0, 0, .125)';
+                vGuias.style.backgroundColor = "transparent";
+                button_border.style.backgroundColor = 'transparent';
+            } else { // if vGuias displayed, hidden it
+                vGuias.style.display = "block";
+                button_border.style.borderBottomColor = 'transparent';
+                vGuias.style.backgroundColor = 'rgba(0, 0, 0, .125)';
+                button_border.style.backgroundColor = 'rgba(0, 0, 0, .2)';
+            }
+        }
+    </script>
+{% endblock content %}
+</body>
+</html>

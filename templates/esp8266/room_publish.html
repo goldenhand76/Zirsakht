@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+  <form action="{% url 'esp8266:room_publish' %}" method="post" id="room-form">
+      {{ form.as_p }}
+    <button name="submit">Submit</button>
+  </form>
+
+</body>
+</html>

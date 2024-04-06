@@ -1,0 +1,8 @@
+.area {
+    background:#fff;
+    opacity:0;
+}
+
+#area1:hover, #area2:hover {
+    opacity:0.2;
+}

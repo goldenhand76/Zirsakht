@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+{% extends "Dashboard/templates/layouts/base.html" %}
+{% load render_table from django_tables2 %}
+{% load verbose_name %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+{% block content %}
+<div class="content">
+    <div class="page-inner">
+        <div class="panel-header bg-primary-gradient">
+            <div class="page-inner py-5">
+            </div>
+        </div>
+
+        <div class="page-inner mt--5">
+            <div class="row mt--2" style="direction: rtl">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header" style="direction: rtl">
+                            <div class="card-head-row">
+                                <div class="card-title text-right">چک لیست</div>
+                            </div>
+                        </div>
+                        <div class="card-body" style="display: block">
+                            <div class="table-responsive table-hover table-sales"
+                                 style="margin-top: 21px;">
+                                <table class="table table-active" style="direction: rtl">
+                                    <thead>
+                                        <tr style="color: whitesmoke">
+                                            <th class="text-right">دوره </th>
+                                            <th class="text-right">فصل</th>
+                                            <th class="text-right">تاریخ</th>
+                                            <th class="text-right">عملکرد</th>
+                                            <th class="text-right">تکمیل شده</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="tbody2">
+                                    </tbody>
+<!--                            {% for object in page_obj %}-->
+<!--                                <a id="button_{{ object.id }}" onclick="fAbreGuias('{{ object.id }}', 'button_{{ object.id }}')" href="{% url 'pmplan:checklist_edit' object.id %}">-->
+<!--                                    <div class="pmplan-list btn" type="button" style="display: flex;background-image: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.8));">-->
+<!--                                        <h5 style="font-size: 1.5rem">دوره:<span-->
+<!--                                                style="font-size: 1.5rem">{{ object.get_duration_display }}</span></h5>-->
+<!--                                        <h5 style="font-size: 1.5rem">فصل:<span-->
+<!--                                                style="font-size: 1.5rem">{{ object.get_season_display }}</span></h5>-->
+<!--                                        <h5 style="font-size: 1.5rem">تاریخ:<span-->
+<!--                                                style="font-size: 1.5rem">{% ltr object.date %}</span></h5>-->
+<!--                                        <div style="display: flex;">-->
+<!--                                            <div>-->
+<!--                                                <div class="ldBar label-align-center point" data-value="{% point object %}" data-preset="green_stripe"></div>-->
+<!--                                            </div>-->
+<!--                                            <div style="margin-right: 60px">-->
+<!--                                                <div class="ldBar label-align-center process" data-value="{% percent object %}" data-preset="blue_stripe"></div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                                    {% endfor %}-->
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+    {% block javascripts %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/dist/loading-bar.css' %}"/>
+    <script type="text/javascript" src="{% static 'assets/dist/loading-bar.js' %}"></script>
+
+<script>
+        $.ajax({
+            url: "{% url 'pmplan:checklists' %}",
+            type: "GET",
+            success: function (response) {
+                var data = JSON.parse(response);
+                console.log(data)
+                // for (i = 0; i < data.length; i++) {
+                //     console.log(data[i])
+                // }
+                $("#tbody2").empty();
+                // var motors = response.motors
+                // var statuses = response.statuses
+                // var temps = response.temps
+                // var times = response.times
+
+                //     $("#tbody2").append(
+                //         "<tr motor=" + motors[i] +
+                //         "><td class=\"text-right\">" + motors[i] +
+                //         "</td><td class=\"text-right\">" + statuses[i] +
+                //         "</td><td class=\"text-right\">" + temps[i] +
+                //         "</td><td class=\"text-right\">" + times[i] +
+                //         "</td></tr>");
+                // }
+            },
+        });
+
+    </script>
+
+        <script>
+        function fAbreGuias(id, button) {
+            var vGuias = document.getElementById(id);
+            var button_border = document.getElementById(button);
+            if (vGuias.style.display === "block") {
+                vGuias.style.display = "none";
+                button_border.style.borderBottomColor = 'rgba(0, 0, 0, .125)';
+                vGuias.style.backgroundColor = "transparent";
+                button_border.style.backgroundColor = 'transparent';
+            } else {
+                vGuias.style.display = "block";
+                button_border.style.borderBottomColor = 'transparent';
+                vGuias.style.backgroundColor = 'rgba(0, 0, 0, .125)';
+                button_border.style.backgroundColor = 'rgba(0, 0, 0, .2)';
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'pmplan:checklists' %}",
+                    data: {"id": id},
+                success: function (response) {
+                    var data = JSON.parse(response["data"]);
+                    var fields = data[0]["fields"];
+                }
+            });
+            }
+        }
+    </script>
+    {% endblock javascripts %}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<title>
+        اداره زیرساخت فناوری - {% block title %}{% endblock %} | AppSeed
+    </title>
+
+	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+	<link rel="icon" href="{% static "dashboard/static/assets/img/icon.ico" %}" type="image/x-icon"/>
+	<link rel="canonical" href="https://appseed.us/admin-dashboards/django-dashboard-atlantis-dark">
+
+	<!-- Fonts and icons -->
+    <script src="{% static "dashboard/static/assets/js/plugin/webfont/webfont.min.js" %}"></script>
+	<script>
+		WebFont.load({
+			google: {"families":["Lato:300,400,700,900"]},
+			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+            urls: ['{% static "dashboard/static/assets/css/fonts.min.css" %}']},
+			active: function() {
+				sessionStorage.fonts = true;
+			}
+		});
+	</script>
+
+	<!-- CSS Files -->
+    <link rel="stylesheet" href="{% static "dashboard/static/assets/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "dashboard/static/assets/css/atlantis.min.css" %}">
+	<!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="{% static "dashboard/static/assets/css/demo.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'assets/js/jalali_calander/dist/kamadatepicker.min.css' %}">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome-all.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'assets/fonts/font_style.css' %}">
+
+    <!-- Specific Page CSS goes HERE  -->
+    {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+<body data-background-color="dark">
+
+	<div class="wrapper">
+
+        {% include 'Dashboard/templates/includes/navigation.html' %}
+
+        {% include 'Dashboard/templates/includes/sidebar.html' %}
+
+		<div class="main-panel">
+
+			{% block content %}{% endblock content %}
+
+			{% include 'Dashboard/templates/includes/footer.html' %}
+		</div>
+
+	</div>
+	{% include 'Dashboard/templates/includes/scripts.html' %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}{% endblock javascripts %}
+
+</body>
+</html>

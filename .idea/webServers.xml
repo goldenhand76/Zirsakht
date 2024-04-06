@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="05903aec-6db5-4f3c-aa9f-20c4cc8d83d6" name="Zirsakht" url="">
+        <fileTransfer rootFolder="/var/www/Zirsakht" accessType="SFTP" host="iotcom.ir" port="2858" sshConfigId="7769d0ea-02a3-436e-83f5-da2faccb259c" sshConfig="RaspberryPi">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

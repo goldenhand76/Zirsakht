@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% extends 'home/base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% block content %}
+    <style>
+.switch {
+  position: relative;
+  display: inline-block;
+    background: url("/static/assets/img/computer-icons-button-clip-art-turn-off-ico-download-1d4157047a628b7e05ddd472c57399dd.png") center / contain no-repeat;
+  width: 48px;
+  height: 48px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 40px;
+  width: 40px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(52px);
+  -ms-transform: translateX(52px);
+  transform: translateX(52px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+
+    <div style="display: flex">
+    <div class="motor" style="margin: 0 auto">
+        <label class="switch">
+          <input id="toggle-motor" type="checkbox" >
+          <span class="slider round"></span>
+        </label>
+        <button style="width: 100px; height: 200px; background: url('/static/assets/img/computer-icons-button-clip-art-turn-off-ico-download-1d4157047a628b7e05ddd472c57399dd.png') center / contain no-repeat;">hello</button>
+    </div>
+    </div>
+
+{% endblock content %}
+</body>
+</html>

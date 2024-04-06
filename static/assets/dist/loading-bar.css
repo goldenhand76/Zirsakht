@@ -1,0 +1,53 @@
+.ldBar {
+  position: relative;
+    margin: auto;
+}
+
+.ldBar.process path.mainline {
+    stroke-width: 12;
+    stroke: #09f;
+    stroke-linecap: round;
+    margin: auto;
+  }
+.ldBar.point path.mainline {
+    stroke-width: 12;
+    stroke: #00ff10;
+    stroke-linecap: round;
+    margin: auto;
+  }
+  .ldBar.process path.baseline {
+    stroke-width: 15;
+    stroke: rgb(255, 255, 255);
+    stroke-linecap: round;
+  }
+
+    .ldBar.point path.baseline {
+    stroke-width: 15;
+    stroke: rgb(255, 255, 255);
+    stroke-linecap: square;
+  }
+  .ldBar-label {
+    color: #f5f5ff;
+    font-size: 1.5em;
+    font-weight: 500;
+  }
+
+
+.ldBar.label-center > .ldBar-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.ldBar.process .ldBar-label:after {
+  content: "%";
+  display: inline;
+}
+.ldBar.point .ldBar-label:after {
+  content: "";
+  display: inline;
+}
+.ldBar.no-percent .ldBar-label:after {
+  content: "تکمیل نشده";
+}
